@@ -1,14 +1,23 @@
 #!/bin/sh
-# Plesk Git "Ek dağıtım eylemleri" kutusuna SADECE şunu yazın (tek satır):
+# Plesk "Eylemleri dağıt" kutusu (dağıtım hedefi /httpdocs iken):
 #   sh scripts/plesk-deploy.sh
-# PHP yolu farklıysa ortam değişkeni: PLESK_PHP_BIN=/opt/plesk/php/8.3/bin/php
+# ASLA "httpdocs/scripts/..." kullanmayın; çalışma dizini zaten httpdocs olur.
 
 set -e
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-cd "$ROOT"
 
-if [ ! -f ./artisan ]; then
-  echo "artisan not found in $ROOT" >&2
+# Plesk PATH'te dirname/cd olmayabiliyor; $0 ile yol kurmayız.
+if [ -f ./artisan ]; then
+  :
+elif [ -f httpdocs/artisan ]; then
+  cd httpdocs
+elif [ -f /httpdocs/artisan ]; then
+  cd /httpdocs
+elif [ -n "$HOME" ] && [ -f "$HOME/httpdocs/artisan" ]; then
+  cd "$HOME/httpdocs"
+elif [ -f /var/www/vhosts/rehagazetesi.com/httpdocs/artisan ]; then
+  cd /var/www/vhosts/rehagazetesi.com/httpdocs
+else
+  echo "artisan not found cwd=$(pwd)" >&2
   exit 1
 fi
 
