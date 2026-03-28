@@ -1,14 +1,16 @@
 #!/bin/sh
-# Plesk "Eylemleri dağıt" kutusu (dağıtım hedefi /httpdocs iken):
+# Plesk "Eylemleri dağıt" (hedef /httpdocs):
 #   sh scripts/plesk-deploy.sh
-# ASLA "httpdocs/scripts/..." kullanmayın; çalışma dizini zaten httpdocs olur.
 #
-# Ek eylem chroot'unda /opt/plesk bazen yoktur. O zaman Plesk ortam değişkeni:
-#   PLESK_PHP_BIN=/tam/yol/php
+# PHP hâlâ bulunamazsa (Git eylemi chroot'ta /opt gorunmez) kutuya TEK SATIR:
+#   /bin/bash --login -c 'cd httpdocs && /opt/plesk/php/8.3/bin/php artisan migrate --force --no-interaction'
+# (Surumu SSH'te: ls /opt/plesk/php/*/bin/php ile dogrulayin.)
 
 set -e
 
-# Plesk PATH'te dirname/cd olmayabiliyor; $0 ile yol kurmayız.
+PATH="/opt/plesk/php/8.4/bin:/opt/plesk/php/8.3/bin:/opt/plesk/php/8.2/bin:/opt/plesk/php/8.1/bin:/usr/local/bin:/usr/bin:/bin${PATH:+:$PATH}"
+export PATH
+
 if [ -f ./artisan ]; then
   :
 elif [ -f httpdocs/artisan ]; then
@@ -25,9 +27,10 @@ else
 fi
 
 PHP=""
-if [ -n "$PLESK_PHP_BIN" ] && [ -x "$PLESK_PHP_BIN" ]; then
+if [ -n "$PLESK_PHP_BIN" ] && [ -f "$PLESK_PHP_BIN" ] && "$PLESK_PHP_BIN" -v >/dev/null 2>&1; then
   PHP="$PLESK_PHP_BIN"
-else
+fi
+if [ -z "$PHP" ]; then
   for cand in \
     /opt/plesk/php/8.4/bin/php \
     /opt/plesk/php/8.3/bin/php \
@@ -36,7 +39,7 @@ else
     /usr/bin/php \
     /usr/local/bin/php
   do
-    if [ -x "$cand" ]; then
+    if [ -f "$cand" ] && "$cand" -v >/dev/null 2>&1; then
       PHP="$cand"
       break
     fi
@@ -44,9 +47,13 @@ else
 fi
 if [ -z "$PHP" ]; then
   PHP=$(command -v php 2>/dev/null) || true
+  if [ -n "$PHP" ] && ! "$PHP" -v >/dev/null 2>&1; then
+    PHP=""
+  fi
 fi
-if [ -z "$PHP" ] || [ ! -x "$PHP" ]; then
-  echo "PHP not found. In SSH run: ls /opt/plesk/php/*/bin/php then set PLESK_PHP_BIN in Plesk." >&2
+
+if [ -z "$PHP" ]; then
+  echo "PHP not found in Git deploy environment. Use bash login line in script header, or set PLESK_PHP_BIN." >&2
   exit 1
 fi
 
