@@ -1,10 +1,11 @@
 #!/bin/sh
-# Plesk "Eylemleri dağıt" (hedef /httpdocs):
-#   sh scripts/plesk-deploy.sh
+# Asil calistirma: plesk-git-hook.sh (Plesk kutusuna o yazilir).
+# Plesk "Eylemleri dağıt":
+#   sh scripts/plesk-git-hook.sh
 #
-# PHP hâlâ bulunamazsa (Git eylemi chroot'ta /opt gorunmez) kutuya TEK SATIR:
+# Bu dosyayi dogrudan calistirmayin; Git chroot'ta PHP bulunmaz.
+# Manuel tek satir (kanca kullanmiyorsaniz):
 #   /bin/bash --login -c 'cd httpdocs && /opt/plesk/php/8.3/bin/php artisan migrate --force --no-interaction'
-# (Surumu SSH'te: ls /opt/plesk/php/*/bin/php ile dogrulayin.)
 
 set -e
 
