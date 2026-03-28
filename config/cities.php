@@ -1,0 +1,33 @@
+<?php
+
+return [
+    'default' => 'sanliurfa',
+    'cities' => [
+        'adana'      => ['name' => 'Adana',      'lat' => 37.0,   'lon' => 35.32],
+        'ankara'     => ['name' => 'Ankara',     'lat' => 39.93,  'lon' => 32.85],
+        'antalya'    => ['name' => 'Antalya',    'lat' => 36.9,   'lon' => 30.71],
+        'aydin'      => ['name' => 'Aydın',      'lat' => 37.85,  'lon' => 27.85],
+        'balikesir'  => ['name' => 'Balıkesir',  'lat' => 39.65,  'lon' => 27.88],
+        'bursa'      => ['name' => 'Bursa',      'lat' => 40.19,  'lon' => 29.06],
+        'diyarbakir' => ['name' => 'Diyarbakır', 'lat' => 37.92,  'lon' => 40.22],
+        'edirne'     => ['name' => 'Edirne',     'lat' => 41.68,  'lon' => 26.56],
+        'erzurum'    => ['name' => 'Erzurum',    'lat' => 39.9,   'lon' => 41.28],
+        'eskisehir'  => ['name' => 'Eskişehir',  'lat' => 39.78,  'lon' => 30.52],
+        'gaziantep'  => ['name' => 'Gaziantep',  'lat' => 37.07,  'lon' => 37.38],
+        'hatay'      => ['name' => 'Hatay',      'lat' => 36.2,   'lon' => 36.15],
+        'istanbul'   => ['name' => 'İstanbul',   'lat' => 41.01,  'lon' => 28.95],
+        'izmir'      => ['name' => 'İzmir',      'lat' => 38.42,  'lon' => 27.14],
+        'kayseri'    => ['name' => 'Kayseri',    'lat' => 38.73,  'lon' => 35.48],
+        'kocaeli'    => ['name' => 'Kocaeli',    'lat' => 40.77,  'lon' => 29.92],
+        'konya'      => ['name' => 'Konya',      'lat' => 37.87,  'lon' => 32.48],
+        'malatya'    => ['name' => 'Malatya',    'lat' => 38.35,  'lon' => 38.32],
+        'manisa'     => ['name' => 'Manisa',     'lat' => 38.62,  'lon' => 27.43],
+        'mardin'     => ['name' => 'Mardin',     'lat' => 37.32,  'lon' => 40.72],
+        'mersin'     => ['name' => 'Mersin',     'lat' => 36.8,   'lon' => 34.63],
+        'sakarya'    => ['name' => 'Sakarya',    'lat' => 40.69,  'lon' => 30.41],
+        'samsun'     => ['name' => 'Samsun',     'lat' => 41.28,  'lon' => 36.33],
+        'sanliurfa'  => ['name' => 'Şanlıurfa',  'lat' => 37.15,  'lon' => 38.79],
+        'trabzon'    => ['name' => 'Trabzon',    'lat' => 41.0,   'lon' => 39.73],
+        'van'        => ['name' => 'Van',        'lat' => 38.49,  'lon' => 43.38],
+    ],
+];
