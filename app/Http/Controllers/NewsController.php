@@ -23,15 +23,34 @@ class NewsController extends Controller
             if (config('archive.enabled')) {
                 $slugColumn = config('archive.columns.news.slug', 'slug');
                 $statusColumn = config('archive.columns.news.status', 'status');
-                $existsInArchive = ArchiveNews::query()
+                $archiveItem = ArchiveNews::query()
                     ->where($slugColumn, $slug)
                     ->whereIn($statusColumn, ['publish', 'published'])
-                    ->exists();
+                    ->select([
+                        $slugColumn.' as slug',
+                        'guid',
+                    ])
+                    ->first();
 
-                if ($existsInArchive) {
-                    $archiveBaseUrl = rtrim(config('archive.site_url', 'https://arsiv.rehagazetesi.com'), '/');
+                if ($archiveItem) {
+                    $archiveBaseUrl = rtrim((string) config('archive.site_url', 'https://arsiv.rehagazetesi.com'), '/');
                     $newsPathPrefix = trim((string) config('archive.news_path_prefix', 'kose-yazilari'), '/');
-                    $archiveUrl = $archiveBaseUrl.'/'.($newsPathPrefix !== '' ? $newsPathPrefix.'/' : '').ltrim($slug, '/').'/';
+                    $archiveUrl = null;
+
+                    if (!empty($archiveItem->guid) && filter_var($archiveItem->guid, FILTER_VALIDATE_URL)) {
+                        $archiveUrl = (string) $archiveItem->guid;
+                    } else {
+                        $archiveUrl = $archiveBaseUrl.'/'.($newsPathPrefix !== '' ? $newsPathPrefix.'/' : '').ltrim($slug, '/').'/';
+                    }
+
+                    $parsedBase = parse_url($archiveBaseUrl);
+                    $parsedTarget = parse_url($archiveUrl);
+                    if (is_array($parsedBase) && is_array($parsedTarget) && isset($parsedBase['scheme'], $parsedBase['host'])) {
+                        $targetPath = $parsedTarget['path'] ?? '';
+                        $targetQuery = isset($parsedTarget['query']) ? '?'.$parsedTarget['query'] : '';
+                        $targetFragment = isset($parsedTarget['fragment']) ? '#'.$parsedTarget['fragment'] : '';
+                        $archiveUrl = $parsedBase['scheme'].'://'.$parsedBase['host'].$targetPath.$targetQuery.$targetFragment;
+                    }
 
                     return redirect()->away($archiveUrl, 301);
                 }
