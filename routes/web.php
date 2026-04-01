@@ -71,7 +71,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('settings/demo/load', [SettingsController::class, 'loadDemoData'])->name('settings.demo.load');
             Route::post('settings/demo/clear', [SettingsController::class, 'clearDemoData'])->name('settings.demo.clear');
             Route::resource('categories', AdminCategoryController::class)->names('categories')->except(['show']);
-            Route::resource('editors', AdminEditorController::class)->names('editors')->only(['index', 'create', 'store', 'edit', 'update']);
+            Route::resource('editors', AdminEditorController::class)->names('editors')->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
         });
     });
 });

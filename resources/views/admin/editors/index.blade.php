@@ -36,7 +36,14 @@
                 <td class="p-4">{{ $editor->can_access_archive ? 'Açık' : 'Kapalı' }}</td>
                 <td class="p-4">{{ $editor->news_count }}</td>
                 <td class="p-4 text-right">
-                    <a href="{{ route('admin.editors.edit', $editor) }}" class="text-red-600 hover:text-red-800 font-medium">Düzenle</a>
+                    <div class="inline-flex items-center gap-3">
+                        <a href="{{ route('admin.editors.edit', $editor) }}" class="text-red-600 hover:text-red-800 font-medium">Düzenle</a>
+                        <form action="{{ route('admin.editors.destroy', $editor) }}" method="POST" class="inline" onsubmit="return confirm('Bu editörü silmek istediğinize emin misiniz?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-gray-600 hover:text-red-700 font-medium">Sil</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             @empty

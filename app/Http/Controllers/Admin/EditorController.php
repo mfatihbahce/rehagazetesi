@@ -110,4 +110,15 @@ class EditorController extends Controller
 
         return redirect()->route('admin.editors.index')->with('success', 'Editör güncellendi.');
     }
+
+    public function destroy(User $editor)
+    {
+        if ($editor->role !== 'editor') {
+            abort(404);
+        }
+
+        $editor->delete();
+
+        return redirect()->route('admin.editors.index')->with('success', 'Editör silindi.');
+    }
 }
