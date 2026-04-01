@@ -20,13 +20,13 @@
                     @if($editor->is_chief_columnist)
                     <span class="text-[10px] uppercase tracking-wide bg-amber-100 text-amber-700 px-2 py-0.5 rounded">Baş Köşe Yazarı</span>
                     @endif
+                    @if($editor->editorProfile?->title)
+                    <span class="text-[11px] text-gray-500">{{ $editor->editorProfile->title }}</span>
+                    @endif
                     @if($editor->editor_order)
                     <span class="text-[10px] uppercase tracking-wide bg-gray-100 text-gray-600 px-2 py-0.5 rounded">Sıra: {{ $editor->editor_order }}</span>
                     @endif
                 </div>
-                @if($editor->editorProfile?->title)
-                <p class="text-sm text-gray-600">{{ $editor->editorProfile->title }}</p>
-                @endif
                 @if($editor->editorProfile?->bio)
                 <p class="text-sm text-gray-500 mt-2 line-clamp-2">{{ Str::limit($editor->editorProfile->bio, 100) }}</p>
                 @endif
