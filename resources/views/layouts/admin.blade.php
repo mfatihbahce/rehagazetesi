@@ -15,13 +15,19 @@
 </head>
 <body class="bg-gray-100">
     <div class="flex min-h-screen">
+        <div id="admin-sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
         {{-- Sidebar - Profesyonel haber sitesi paneli --}}
-        <aside class="w-64 bg-slate-800 text-slate-200 fixed h-full flex flex-col z-40">
+        <aside id="admin-sidebar" class="w-64 bg-slate-800 text-slate-200 fixed h-full flex flex-col z-40 -translate-x-full lg:translate-x-0 transition-transform duration-200">
             <div class="p-5 border-b border-slate-700 shrink-0">
+                <div class="flex items-center justify-between gap-2">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2">
                     <span class="w-8 h-8 bg-red-600 rounded flex items-center justify-center text-white font-bold text-sm">RG</span>
                     <span class="font-bold text-white text-sm">{{ config('app.name') }}</span>
                 </a>
+                <button type="button" id="admin-sidebar-close" class="lg:hidden text-slate-300 hover:text-white p-1 rounded">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+                </div>
             </div>
 
             <nav class="flex-1 overflow-y-auto py-4">
@@ -127,9 +133,14 @@
             </div>
         </aside>
 
-        <div class="flex-1 ml-64">
+        <div class="flex-1 lg:ml-64">
             <header class="bg-white shadow-sm px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h1 class="text-xl font-semibold text-gray-800">@yield('page-title', 'Admin Panel')</h1>
+                <div class="flex items-center gap-3">
+                    <button type="button" id="admin-sidebar-open" class="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded border border-gray-200 text-gray-700 hover:bg-gray-100">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
+                    <h1 class="text-xl font-semibold text-gray-800">@yield('page-title', 'Admin Panel')</h1>
+                </div>
                 <div class="flex items-center gap-3">
                     <a href="{{ route('home') }}" target="_blank" class="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
@@ -167,5 +178,38 @@
         </div>
     </div>
     @stack('scripts')
+    <script>
+        (function() {
+            var sidebar = document.getElementById('admin-sidebar');
+            var overlay = document.getElementById('admin-sidebar-overlay');
+            var openBtn = document.getElementById('admin-sidebar-open');
+            var closeBtn = document.getElementById('admin-sidebar-close');
+            if (!sidebar || !overlay || !openBtn || !closeBtn) return;
+
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            }
+
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+
+            openBtn.addEventListener('click', openSidebar);
+            closeBtn.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 1024) {
+                    overlay.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                } else if (!sidebar.classList.contains('-translate-x-full')) {
+                    overlay.classList.remove('hidden');
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
