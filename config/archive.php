@@ -2,6 +2,7 @@
 
 return [
     'enabled' => env('ARCHIVE_ENABLED', false),
+    'site_url' => env('ARCHIVE_SITE_URL', 'https://arsiv.rehagazetesi.com'),
 
     'tables' => [
         'users' => env('ARCHIVE_USERS_TABLE', 'users'),

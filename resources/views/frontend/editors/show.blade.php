@@ -37,7 +37,17 @@
             <tbody>
                 @forelse($news as $item)
                 <tr class="border-t">
-                    <td class="p-4">{{ $item->title ?: '-' }}</td>
+                    <td class="p-4">
+                        @php
+                            $archiveBaseUrl = rtrim(config('archive.site_url', 'https://arsiv.rehagazetesi.com'), '/');
+                            $archiveUrl = !empty($item->slug)
+                                ? $archiveBaseUrl . '/' . ltrim($item->slug, '/')
+                                : $archiveBaseUrl . '/?p=' . $item->id;
+                        @endphp
+                        <a href="{{ $archiveUrl }}" target="_blank" rel="noopener noreferrer" class="text-[#BB0A30] hover:underline">
+                            {{ $item->title ?: 'Başlık yok' }}
+                        </a>
+                    </td>
                     <td class="p-4">{{ $item->status ?: '-' }}</td>
                     <td class="p-4">{{ $item->published_at ?: '-' }}</td>
                 </tr>
