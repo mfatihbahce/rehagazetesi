@@ -71,6 +71,12 @@ class NewsService
             $statusColumn = config('archive.columns.news.status', 'status');
             $publishedAtColumn = config('archive.columns.news.published_at', 'created_at');
             $primaryKey = config('archive.columns.news.primary_key', 'id');
+            $excerptColumn = config('archive.columns.news.excerpt', 'post_excerpt');
+            $featuredImageMetaKey = config('archive.columns.news.featured_image_meta_key', '_thumbnail_id');
+            $newsTable = str_replace('`', '', config('archive.tables.news', 'wp_posts'));
+            $postmetaTable = str_replace('`', '', config('archive.tables.postmeta', 'wp_postmeta'));
+            $newsTableRef = "`{$newsTable}`";
+            $postmetaTableRef = "`{$postmetaTable}`";
 
             $news = ArchiveNews::query()
                 ->where($authorKey, $author->legacy_user_id)
@@ -81,8 +87,10 @@ class NewsService
                     DB::raw("{$slugColumn} as slug"),
                     DB::raw("{$statusColumn} as status"),
                     DB::raw("{$publishedAtColumn} as published_at"),
+                    DB::raw("{$excerptColumn} as excerpt"),
                     DB::raw("post_type as post_type"),
                     DB::raw("guid as guid"),
+                    DB::raw("(SELECT att.guid FROM {$postmetaTableRef} pm INNER JOIN {$newsTableRef} att ON att.`{$primaryKey}` = pm.meta_value WHERE pm.post_id = {$newsTableRef}.`{$primaryKey}` AND pm.meta_key = '{$featuredImageMetaKey}' LIMIT 1) as featured_image"),
                 ])
                 ->orderByDesc($publishedAtColumn)
                 ->paginate(12);

@@ -25,44 +25,43 @@
 
     <h2 class="text-xl font-bold text-black mb-6 border-b-2 border-[#BB0A30] pb-2 inline-block">{{ $author->name }}'in Haberleri</h2>
     @if(!empty($usesArchiveNews) && $usesArchiveNews)
-    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
-        <table class="w-full">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="text-left p-4">Başlık</th>
-                    <th class="text-left p-4">Durum</th>
-                    <th class="text-left p-4">Tarih</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($news as $item)
-                <tr class="border-t">
-                    <td class="p-4">
-                        @php
-                            $archiveBaseUrl = rtrim(config('archive.site_url', 'https://arsiv.rehagazetesi.com'), '/');
-                            $newsPathPrefix = trim((string) config('archive.news_path_prefix', 'kose-yazilari'), '/');
-                            $archiveUrl = null;
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        @forelse($news as $item)
+        @php
+            $archiveBaseUrl = rtrim(config('archive.site_url', 'https://arsiv.rehagazetesi.com'), '/');
+            $newsPathPrefix = trim((string) config('archive.news_path_prefix', 'kose-yazilari'), '/');
+            $archiveUrl = null;
 
-                            if (!empty($item->slug)) {
-                                $archiveUrl = $archiveBaseUrl . '/' . ($newsPathPrefix !== '' ? $newsPathPrefix . '/' : '') . ltrim($item->slug, '/') . '/';
-                            } elseif (!empty($item->guid) && filter_var($item->guid, FILTER_VALIDATE_URL)) {
-                                $archiveUrl = $item->guid;
-                            } else {
-                                $archiveUrl = $archiveBaseUrl . '/?p=' . $item->id;
-                            }
-                        @endphp
-                        <a href="{{ $archiveUrl }}" target="_blank" rel="noopener noreferrer" class="text-[#BB0A30] hover:underline">
-                            {{ $item->title ?: 'Başlık yok' }}
-                        </a>
-                    </td>
-                    <td class="p-4">{{ $item->status ?: '-' }}</td>
-                    <td class="p-4">{{ $item->published_at ?: '-' }}</td>
-                </tr>
-                @empty
-                <tr><td colspan="3" class="p-8 text-center text-gray-500">Bu editörün arşivde yayınlanmış haberi yok.</td></tr>
-                @endforelse
-            </tbody>
-        </table>
+            if (!empty($item->slug)) {
+                $archiveUrl = $archiveBaseUrl . '/' . ($newsPathPrefix !== '' ? $newsPathPrefix . '/' : '') . ltrim($item->slug, '/') . '/';
+            } elseif (!empty($item->guid) && filter_var($item->guid, FILTER_VALIDATE_URL)) {
+                $archiveUrl = $item->guid;
+            } else {
+                $archiveUrl = $archiveBaseUrl . '/?p=' . $item->id;
+            }
+
+            $coverImage = !empty($item->featured_image) && filter_var($item->featured_image, FILTER_VALIDATE_URL)
+                ? $item->featured_image
+                : 'https://via.placeholder.com/800x500/1a1a1a/6b7280?text=Kose+Yazisi';
+        @endphp
+        <a href="{{ $archiveUrl }}" target="_blank" rel="noopener noreferrer" class="group block bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 hover:border-gray-200 transition-all duration-300">
+            <div class="aspect-video overflow-hidden bg-gray-100">
+                <img src="{{ $coverImage }}" alt="{{ $item->title ?: 'Başlık yok' }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-gray-900 leading-snug group-hover:text-[#BB0A30] transition-colors line-clamp-2">{{ $item->title ?: 'Başlık yok' }}</h3>
+                @if(!empty($item->excerpt))
+                <p class="text-sm text-gray-600 mt-2 line-clamp-3">{{ Str::limit(strip_tags($item->excerpt), 140) }}</p>
+                @endif
+                <div class="flex items-center justify-between text-xs text-gray-500 mt-4 pt-3 border-t border-gray-100">
+                    <span>{{ $item->status ?: '-' }}</span>
+                    <span>{{ $item->published_at ?: '-' }}</span>
+                </div>
+            </div>
+        </a>
+        @empty
+        <p class="col-span-full text-gray-500 py-12 text-center">Bu editörün arşivde yayınlanmış haberi yok.</p>
+        @endforelse
     </div>
     @else
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

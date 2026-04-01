@@ -8,6 +8,7 @@ return [
     'tables' => [
         'users' => env('ARCHIVE_USERS_TABLE', 'users'),
         'news' => env('ARCHIVE_NEWS_TABLE', 'news'),
+        'postmeta' => env('ARCHIVE_POSTMETA_TABLE', 'wp_postmeta'),
     ],
 
     'columns' => [
@@ -18,6 +19,8 @@ return [
             'slug' => env('ARCHIVE_NEWS_SLUG_COLUMN', 'slug'),
             'status' => env('ARCHIVE_NEWS_STATUS_COLUMN', 'status'),
             'published_at' => env('ARCHIVE_NEWS_PUBLISHED_AT_COLUMN', 'created_at'),
+            'excerpt' => env('ARCHIVE_NEWS_EXCERPT_COLUMN', 'post_excerpt'),
+            'featured_image_meta_key' => env('ARCHIVE_NEWS_FEATURED_IMAGE_META_KEY', '_thumbnail_id'),
         ],
     ],
 ];
