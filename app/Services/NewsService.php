@@ -35,7 +35,9 @@ class NewsService
                 'popular' => $this->newsRepository->getPopular(10),
                 'editors' => User::where('role', 'editor')
                     ->with('editorProfile')
-                    ->whereHas('news', fn ($q) => $q->where('status', 'published'))
+                    ->where('can_access_archive', true)
+                    ->whereNotNull('legacy_user_id')
+                    ->orderBy('name')
                     ->limit(4)
                     ->get(),
                 'categories' => $categories,

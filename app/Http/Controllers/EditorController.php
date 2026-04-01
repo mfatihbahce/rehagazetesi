@@ -18,9 +18,9 @@ class EditorController extends Controller
     {
         $editors = User::where('role', 'editor')
             ->with('editorProfile')
-            ->whereHas('news', function ($q) {
-                $q->where('status', 'published');
-            })
+            ->where('can_access_archive', true)
+            ->whereNotNull('legacy_user_id')
+            ->orderBy('name')
             ->get();
 
         return view('frontend.editors.index', compact('editors'));
