@@ -189,4 +189,21 @@
         </div>
     </form>
 </div>
+
+<section class="mt-8 bg-white rounded-xl shadow overflow-hidden">
+    <div class="p-4 border-b bg-gray-50">
+        <h3 class="font-semibold text-gray-800">Demo Veri Islemleri</h3>
+        <p class="text-sm text-gray-500">Yalnizca olmayan kayitlari ekler, eklenen demo kayitlari temizler.</p>
+    </div>
+    <div class="p-6 flex flex-wrap gap-3">
+        <form action="{{ route('admin.settings.demo.load') }}" method="POST">
+            @csrf
+            <button type="submit" class="bg-emerald-600 text-white px-5 py-2 rounded-lg hover:bg-emerald-700">Demo Veri Yukle</button>
+        </form>
+        <form action="{{ route('admin.settings.demo.clear') }}" method="POST" onsubmit="return confirm('Eklenen demo veriler temizlensin mi?');">
+            @csrf
+            <button type="submit" class="bg-gray-700 text-white px-5 py-2 rounded-lg hover:bg-gray-800">Demo Verileri Temizle</button>
+        </form>
+    </div>
+</section>
 @endsection

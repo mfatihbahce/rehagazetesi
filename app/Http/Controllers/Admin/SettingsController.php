@@ -5,13 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Helpers\SettingsHelper;
 use App\Models\Setting;
+use App\Services\DemoDataService;
 use App\Services\MediaService;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
     public function __construct(
-        protected MediaService $mediaService
+        protected MediaService $mediaService,
+        protected DemoDataService $demoDataService
     ) {}
     private function getDefaults(): array
     {
@@ -101,5 +103,25 @@ class SettingsController extends Controller
         Setting::setMany($validated);
 
         return back()->with('success', 'Ayarlar kaydedildi.');
+    }
+
+    public function loadDemoData()
+    {
+        $stats = $this->demoDataService->load();
+
+        return back()->with(
+            'success',
+            "Demo veriler yuklendi. Eklenen -> Kategori: {$stats['categories']}, Editor: {$stats['users']}, Haber: {$stats['news']}."
+        );
+    }
+
+    public function clearDemoData()
+    {
+        $stats = $this->demoDataService->clear();
+
+        return back()->with(
+            'success',
+            "Demo veriler temizlendi. Silinen -> Kategori: {$stats['categories']}, Editor: {$stats['users']}, Haber: {$stats['news']}."
+        );
     }
 }
