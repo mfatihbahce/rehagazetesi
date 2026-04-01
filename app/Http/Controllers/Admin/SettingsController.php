@@ -111,7 +111,7 @@ class SettingsController extends Controller
 
         return back()->with(
             'success',
-            "Demo veriler yuklendi. Eklenen/Guncellenen -> Ayar: {$stats['settings']}, Kategori: {$stats['categories']}, Editor: {$stats['users']}, Haber: {$stats['news']}."
+            "Demo veriler yuklendi. Ayar: {$stats['settings']} | Kategori (eklenen/guncellenen): {$stats['categories']}/{$stats['updated_categories']} | Editor (eklenen/guncellenen): {$stats['users']}/{$stats['updated_users']} | Haber (eklenen/guncellenen): {$stats['news']}/{$stats['updated_news']}."
         );
     }
 

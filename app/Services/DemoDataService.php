@@ -31,8 +31,13 @@ class DemoDataService
             'news' => 0,
             'settings' => 0,
         ];
+        $updatedCounts = [
+            'categories' => 0,
+            'users' => 0,
+            'news' => 0,
+        ];
 
-        DB::transaction(function () use (&$created, &$addedCounts, $dataset) {
+        DB::transaction(function () use (&$created, &$addedCounts, &$updatedCounts, $dataset) {
             $settingsFromDataset = is_array($dataset['settings'] ?? null) ? $dataset['settings'] : [];
             if (!empty($settingsFromDataset)) {
                 $settingKeys = array_keys($settingsFromDataset);
@@ -54,6 +59,13 @@ class DemoDataService
             foreach ($dataset['categories'] as $row) {
                 $existing = Category::where('slug', $row['slug'])->first();
                 if ($existing) {
+                    $existing->fill([
+                        'name' => $row['name'] ?? $existing->name,
+                        'description' => $row['description'] ?? $existing->description,
+                        'order' => $row['order'] ?? $existing->order,
+                        'is_active' => $row['is_active'] ?? $existing->is_active,
+                    ])->save();
+                    $updatedCounts['categories']++;
                     continue;
                 }
 
@@ -65,6 +77,20 @@ class DemoDataService
             foreach ($dataset['editors'] as $row) {
                 $existing = User::where('email', $row['email'])->first();
                 if ($existing) {
+                    $existing->fill([
+                        'name' => $row['name'] ?? $existing->name,
+                        'role' => $row['role'] ?? $existing->role,
+                        'can_access_archive' => (bool) ($row['can_access_archive'] ?? $existing->can_access_archive),
+                        'legacy_user_id' => array_key_exists('legacy_user_id', $row) ? ($row['legacy_user_id'] !== null ? (int) $row['legacy_user_id'] : null) : $existing->legacy_user_id,
+                    ])->save();
+                    $updatedCounts['users']++;
+                    EditorProfile::updateOrCreate(
+                        ['user_id' => $existing->id],
+                        [
+                            'title' => $row['title'] ?? null,
+                            'bio' => $row['bio'] ?? null,
+                        ]
+                    );
                     continue;
                 }
 
@@ -90,24 +116,24 @@ class DemoDataService
             }
 
             foreach ($dataset['news'] as $row) {
-                $exists = News::where('slug', $row['slug'])->exists();
-                if ($exists) {
-                    continue;
-                }
+                $existingNews = News::where('slug', $row['slug'])->first();
 
                 $categoryId = Category::where('slug', $row['category_slug'])->value('id');
                 $editorId = User::where('email', $row['editor_email'])->value('id');
-                if (!$categoryId || !$editorId) {
+                if (!$categoryId && !$existingNews) {
+                    continue;
+                }
+                if (!$editorId && !$existingNews) {
                     continue;
                 }
 
-                $news = News::create([
+                $payload = [
                     'title' => $row['title'],
                     'slug' => $row['slug'],
                     'excerpt' => $row['excerpt'],
                     'content' => $row['content'],
-                    'category_id' => $categoryId,
-                    'user_id' => $editorId,
+                    'category_id' => $categoryId ?: $existingNews?->category_id,
+                    'user_id' => $editorId ?: $existingNews?->user_id,
                     'status' => $row['status'] ?? 'published',
                     'featured_image' => $row['featured_image'] ?? null,
                     'tags' => $row['tags'] ?? null,
@@ -115,7 +141,15 @@ class DemoDataService
                     'is_featured' => $row['is_featured'] ?? false,
                     'views' => (int) ($row['views'] ?? 0),
                     'published_at' => $row['published_at'] ?? now()->subDays($row['days_ago'] ?? 1),
-                ]);
+                ];
+
+                if ($existingNews) {
+                    $existingNews->fill($payload)->save();
+                    $updatedCounts['news']++;
+                    continue;
+                }
+
+                $news = News::create($payload);
 
                 $created['news'][] = $news->id;
                 $addedCounts['news']++;
@@ -124,7 +158,11 @@ class DemoDataService
             $this->persistTrackingIds($created);
         });
 
-        return $addedCounts;
+        return array_merge($addedCounts, [
+            'updated_categories' => $updatedCounts['categories'],
+            'updated_users' => $updatedCounts['users'],
+            'updated_news' => $updatedCounts['news'],
+        ]);
     }
 
     public function clear(): array
