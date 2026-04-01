@@ -1320,5 +1320,32 @@
             "views": 559,
             "published_at": "2026-03-05 22:59:44"
         }
-    ]
+    ],
+    "settings": {
+        "breaking_news_limit": "5",
+        "comment_enabled": "0",
+        "contact_address": "",
+        "contact_email": "info@rehagazetesi.com",
+        "contact_fax": "",
+        "contact_phone": "",
+        "facebook_url": "https://t.com",
+        "favicon_url": "",
+        "footer_text": "© 2026 Tüm hakları saklıdır.",
+        "google_analytics_id": "",
+        "header_announcement": "test",
+        "instagram_url": "https://t.com",
+        "kunye_content": "KırvarAyhan Tarım Basın Yayın Gazetecilik ve Reklam\r\nAdına\r\nŞanlıReha gazetesi ve Urfahaberci.com\r\nİmtiyaz Sahibi\r\nMustafa Saim AYHAN\r\n…\r\nYazı İşleri Müdürü\r\nAhmet RUFAİOĞLU\r\n…\r\nGenel Yayın Yönetmeni\r\nHüseyin GÜZEL\r\n…\r\nSorumlu Müdür\r\nSüleyman Fecri AYHAN\r\n…\r\nHaber Şefi\r\nAhmet Mürsel AYHAN\r\n…\r\nEge Bölge Temsilcisi\r\nHalit VURAL\r\n…\r\nEditörler\r\nŞeref IŞIKAY\r\nFatih BEYOĞLU\r\nEmrah ÜZER\r\nİbrahim Halil TOK\r\nSerhat Can CENGİZ\r\n…\r\nMuğla Temsilcisi\r\nNuran VURAL\r\n…\r\nHukuk Müşavirleri\r\nAv.Gökhan TÜRKMEN\r\nAv. Halil SAPAN\r\nAv.İbrahim Halil AKYAVUZ\r\n…\r\nMali Müşavirler\r\nSerdar RUFAİOĞLU\r\nAbdurrahman ÖZBAY\r\n…\r\n\r\nSite Editörü ve Sosyal Medya Sorumlusu\r\nMuhammed Fatih BAHÇE\r\n\r\nDış Temsilcilikler\r\n\r\nKIBRIS\r\nHüseyin TURAN\r\n\r\nAZERBAYCAN / BAKÜ\r\nDr.Elnare MUSAYEVA\r\n\r\nÖZBEKİSTAN\r\nCengizhan KURT\r\n\r\nAVUSTURYA/VİYANA\r\nGökçen TUNALI\r\n\r\nBULGARİSTAN\r\nNihal ÖZERGAN\r\nBamyasuyu Mah. 151. Sok No:34/1 Haliliye/ Şanlıurfa\r\n0 542 747 90 34– 0 532 306 08 63",
+        "linkedin_url": "",
+        "logo_url": "",
+        "meta_description": "",
+        "meta_title": "",
+        "news_per_page": "12",
+        "site_description": "",
+        "site_keywords": "yerel haber, haber, gazete",
+        "site_name": "Reha Gazetesi",
+        "site_slogan": "Yerel haberlerin güvenilir kaynağı",
+        "social_share_enabled": "1",
+        "twitter_url": "https://t.com",
+        "youtube_url": "https://t.com"
+    }
 }

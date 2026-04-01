@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Category;
 use App\Models\News;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Console\Command;
 
@@ -77,10 +78,22 @@ class ExportDemoDataFromCurrentDb extends Command
             ->values()
             ->all();
 
+        $excludedSettingKeys = [
+            'demo_data_tracking_ids',
+            'demo_data_settings_backup',
+        ];
+        $settings = Setting::query()
+            ->whereNotIn('key', $excludedSettingKeys)
+            ->orderBy('key')
+            ->get(['key', 'value'])
+            ->mapWithKeys(fn (Setting $setting) => [$setting->key => $setting->value])
+            ->all();
+
         $dataset = [
             'categories' => $categories,
             'editors' => $users,
             'news' => $news,
+            'settings' => $settings,
         ];
 
         file_put_contents(
@@ -92,6 +105,7 @@ class ExportDemoDataFromCurrentDb extends Command
         $this->line('Categories: ' . count($categories));
         $this->line('Editors/Admins: ' . count($users));
         $this->line('News: ' . count($news));
+        $this->line('Settings: ' . count($settings));
 
         return self::SUCCESS;
     }

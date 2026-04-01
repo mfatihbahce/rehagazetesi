@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 class DemoDataService
 {
     private const TRACKING_KEY = 'demo_data_tracking_ids';
+    private const SETTINGS_BACKUP_KEY = 'demo_data_settings_backup';
 
     public function load(): array
     {
@@ -22,14 +23,34 @@ class DemoDataService
             'users' => [],
             'profiles' => [],
             'news' => [],
+            'settings' => [],
         ];
         $addedCounts = [
             'categories' => 0,
             'users' => 0,
             'news' => 0,
+            'settings' => 0,
         ];
 
         DB::transaction(function () use (&$created, &$addedCounts, $dataset) {
+            $settingsFromDataset = is_array($dataset['settings'] ?? null) ? $dataset['settings'] : [];
+            if (!empty($settingsFromDataset)) {
+                $settingKeys = array_keys($settingsFromDataset);
+                $existingSettings = Setting::query()
+                    ->whereIn('key', $settingKeys)
+                    ->pluck('value', 'key')
+                    ->toArray();
+
+                Setting::setMany($settingsFromDataset);
+                $created['settings'] = $settingKeys;
+                $addedCounts['settings'] = count($settingKeys);
+
+                Setting::set(self::SETTINGS_BACKUP_KEY, json_encode([
+                    'touched_keys' => $settingKeys,
+                    'existing_before' => $existingSettings,
+                ]));
+            }
+
             foreach ($dataset['categories'] as $row) {
                 $existing = Category::where('slug', $row['slug'])->first();
                 if ($existing) {
@@ -113,6 +134,7 @@ class DemoDataService
             'categories' => 0,
             'users' => 0,
             'news' => 0,
+            'settings' => 0,
         ];
 
         DB::transaction(function () use ($tracking, &$deleted) {
@@ -128,11 +150,30 @@ class DemoDataService
                 $deleted['categories'] = Category::whereIn('id', $tracking['categories'])->delete();
             }
 
+            if (!empty($tracking['settings'])) {
+                $backupRaw = Setting::getValue(self::SETTINGS_BACKUP_KEY, '');
+                $backup = is_string($backupRaw) ? json_decode($backupRaw, true) : null;
+                $existingBefore = is_array($backup['existing_before'] ?? null) ? $backup['existing_before'] : [];
+                $touched = is_array($backup['touched_keys'] ?? null) ? $backup['touched_keys'] : $tracking['settings'];
+
+                foreach ($touched as $key) {
+                    $key = (string) $key;
+                    if (array_key_exists($key, $existingBefore)) {
+                        Setting::set($key, (string) $existingBefore[$key]);
+                    } else {
+                        Setting::query()->where('key', $key)->delete();
+                    }
+                }
+                $deleted['settings'] = count($touched);
+                Setting::query()->where('key', self::SETTINGS_BACKUP_KEY)->delete();
+            }
+
             Setting::set(self::TRACKING_KEY, json_encode([
                 'categories' => [],
                 'users' => [],
                 'profiles' => [],
                 'news' => [],
+                'settings' => [],
             ]));
         });
 
@@ -148,6 +189,7 @@ class DemoDataService
                 'categories' => [],
                 'editors' => [],
                 'news' => [],
+                'settings' => [],
             ];
         }
 
@@ -157,6 +199,7 @@ class DemoDataService
                 'categories' => [],
                 'editors' => [],
                 'news' => [],
+                'settings' => [],
             ];
         }
 
@@ -164,6 +207,7 @@ class DemoDataService
             'categories' => is_array($decoded['categories'] ?? null) ? $decoded['categories'] : [],
             'editors' => is_array($decoded['editors'] ?? null) ? $decoded['editors'] : [],
             'news' => is_array($decoded['news'] ?? null) ? $decoded['news'] : [],
+            'settings' => is_array($decoded['settings'] ?? null) ? $decoded['settings'] : [],
         ];
     }
 
@@ -175,6 +219,7 @@ class DemoDataService
             'users' => array_values(array_unique(array_merge($old['users'], $newIds['users']))),
             'profiles' => array_values(array_unique(array_merge($old['profiles'], $newIds['profiles']))),
             'news' => array_values(array_unique(array_merge($old['news'], $newIds['news']))),
+            'settings' => array_values(array_unique(array_merge($old['settings'], $newIds['settings']))),
         ];
 
         Setting::set(self::TRACKING_KEY, json_encode($merged));
@@ -189,6 +234,7 @@ class DemoDataService
                 'users' => [],
                 'profiles' => [],
                 'news' => [],
+                'settings' => [],
             ];
         }
 
@@ -199,6 +245,7 @@ class DemoDataService
                 'users' => [],
                 'profiles' => [],
                 'news' => [],
+                'settings' => [],
             ];
         }
 
@@ -207,6 +254,7 @@ class DemoDataService
             'users' => array_values(array_map('intval', $decoded['users'] ?? [])),
             'profiles' => array_values(array_map('intval', $decoded['profiles'] ?? [])),
             'news' => array_values(array_map('intval', $decoded['news'] ?? [])),
+            'settings' => array_values(array_map('strval', $decoded['settings'] ?? [])),
         ];
     }
 

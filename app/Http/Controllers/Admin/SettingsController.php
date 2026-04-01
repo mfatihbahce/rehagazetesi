@@ -111,7 +111,7 @@ class SettingsController extends Controller
 
         return back()->with(
             'success',
-            "Demo veriler yuklendi. Eklenen -> Kategori: {$stats['categories']}, Editor: {$stats['users']}, Haber: {$stats['news']}."
+            "Demo veriler yuklendi. Eklenen/Guncellenen -> Ayar: {$stats['settings']}, Kategori: {$stats['categories']}, Editor: {$stats['users']}, Haber: {$stats['news']}."
         );
     }
 
@@ -121,7 +121,7 @@ class SettingsController extends Controller
 
         return back()->with(
             'success',
-            "Demo veriler temizlendi. Silinen -> Kategori: {$stats['categories']}, Editor: {$stats['users']}, Haber: {$stats['news']}."
+            "Demo veriler temizlendi. Geri Alinan/Silinen -> Ayar: {$stats['settings']}, Kategori: {$stats['categories']}, Editor: {$stats['users']}, Haber: {$stats['news']}."
         );
     }
 }
