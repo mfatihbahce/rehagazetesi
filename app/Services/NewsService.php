@@ -81,6 +81,8 @@ class NewsService
                     DB::raw("{$slugColumn} as slug"),
                     DB::raw("{$statusColumn} as status"),
                     DB::raw("{$publishedAtColumn} as published_at"),
+                    DB::raw("post_type as post_type"),
+                    DB::raw("guid as guid"),
                 ])
                 ->orderByDesc($publishedAtColumn)
                 ->paginate(12);
