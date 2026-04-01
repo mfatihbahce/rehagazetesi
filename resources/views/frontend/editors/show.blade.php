@@ -31,6 +31,14 @@
             $archiveBaseUrl = rtrim(config('archive.site_url', 'https://arsiv.rehagazetesi.com'), '/');
             $newsPathPrefix = trim((string) config('archive.news_path_prefix', 'kose-yazilari'), '/');
             $archiveUrl = null;
+            $statusRaw = strtolower((string) ($item->status ?? ''));
+            $statusLabel = match ($statusRaw) {
+                'publish', 'published' => 'Yayinda',
+                'draft' => 'Taslak',
+                'pending' => 'Beklemede',
+                'private' => 'Ozel',
+                default => $item->status ?: '-',
+            };
 
             if (!empty($item->slug)) {
                 $archiveUrl = $archiveBaseUrl . '/' . ($newsPathPrefix !== '' ? $newsPathPrefix . '/' : '') . ltrim($item->slug, '/') . '/';
@@ -40,13 +48,20 @@
                 $archiveUrl = $archiveBaseUrl . '/?p=' . $item->id;
             }
 
-            $coverImage = !empty($item->featured_image) && filter_var($item->featured_image, FILTER_VALIDATE_URL)
-                ? $item->featured_image
-                : 'https://via.placeholder.com/800x500/1a1a1a/6b7280?text=Kose+Yazisi';
+            $coverImage = null;
+            if (!empty($item->featured_image) && filter_var($item->featured_image, FILTER_VALIDATE_URL)) {
+                $coverImage = preg_replace('/^http:\/\//i', 'https://', $item->featured_image);
+            }
         @endphp
         <a href="{{ $archiveUrl }}" target="_blank" rel="noopener noreferrer" class="group block bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 hover:border-gray-200 transition-all duration-300">
             <div class="aspect-video overflow-hidden bg-gray-100">
+                @if($coverImage)
                 <img src="{{ $coverImage }}" alt="{{ $item->title ?: 'Başlık yok' }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                @else
+                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 text-gray-600 text-sm font-medium px-4 text-center">
+                    Gorsel yok
+                </div>
+                @endif
             </div>
             <div class="p-4">
                 <h3 class="font-bold text-gray-900 leading-snug group-hover:text-[#BB0A30] transition-colors line-clamp-2">{{ $item->title ?: 'Başlık yok' }}</h3>
@@ -54,7 +69,7 @@
                 <p class="text-sm text-gray-600 mt-2 line-clamp-3">{{ Str::limit(strip_tags($item->excerpt), 140) }}</p>
                 @endif
                 <div class="flex items-center justify-between text-xs text-gray-500 mt-4 pt-3 border-t border-gray-100">
-                    <span>{{ $item->status ?: '-' }}</span>
+                    <span>{{ $statusLabel }}</span>
                     <span>{{ $item->published_at ?: '-' }}</span>
                 </div>
             </div>
