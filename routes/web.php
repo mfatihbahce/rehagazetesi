@@ -75,3 +75,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
     });
 });
+
+// Legacy main-domain news links like /gundem/{slug}
+Route::get('/{section}/{slug}', [NewsController::class, 'legacyArchiveRedirect'])
+    ->where([
+        'section' => '^(?!admin$).+',
+        'slug' => '.+',
+    ])
+    ->name('news.legacy-archive-redirect');
