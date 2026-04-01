@@ -193,7 +193,7 @@
 <section class="mt-8 bg-white rounded-xl shadow overflow-hidden">
     <div class="p-4 border-b bg-gray-50">
         <h3 class="font-semibold text-gray-800">Demo Veri Islemleri</h3>
-        <p class="text-sm text-gray-500">Yalnizca olmayan kayitlari ekler, eklenen demo kayitlari temizler.</p>
+        <p class="text-sm text-gray-500">Yalnizca olmayan kayitlari ekler, eklenen demo kayitlari temizler. Kaynak dosya: <code>database/demo/demo-data.json</code></p>
     </div>
     <div class="p-6 flex flex-wrap gap-3">
         <form action="{{ route('admin.settings.demo.load') }}" method="POST">

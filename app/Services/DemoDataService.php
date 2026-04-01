@@ -9,7 +9,6 @@ use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class DemoDataService
 {
@@ -17,6 +16,7 @@ class DemoDataService
 
     public function load(): array
     {
+        $dataset = $this->demoDataset();
         $created = [
             'categories' => [],
             'users' => [],
@@ -29,8 +29,8 @@ class DemoDataService
             'news' => 0,
         ];
 
-        DB::transaction(function () use (&$created, &$addedCounts) {
-            foreach ($this->categoriesPayload() as $row) {
+        DB::transaction(function () use (&$created, &$addedCounts, $dataset) {
+            foreach ($dataset['categories'] as $row) {
                 $existing = Category::where('slug', $row['slug'])->first();
                 if ($existing) {
                     continue;
@@ -41,7 +41,7 @@ class DemoDataService
                 $addedCounts['categories']++;
             }
 
-            foreach ($this->editorsPayload() as $row) {
+            foreach ($dataset['editors'] as $row) {
                 $existing = User::where('email', $row['email'])->first();
                 if ($existing) {
                     continue;
@@ -50,9 +50,10 @@ class DemoDataService
                 $user = User::create([
                     'name' => $row['name'],
                     'email' => $row['email'],
-                    'password' => Hash::make('123456'),
-                    'role' => 'editor',
-                    'can_access_archive' => false,
+                    'password' => Hash::make((string) ($row['password'] ?? '123456')),
+                    'role' => $row['role'] ?? 'editor',
+                    'can_access_archive' => (bool) ($row['can_access_archive'] ?? false),
+                    'legacy_user_id' => isset($row['legacy_user_id']) ? (int) $row['legacy_user_id'] : null,
                 ]);
                 $created['users'][] = $user->id;
                 $addedCounts['users']++;
@@ -67,7 +68,7 @@ class DemoDataService
                 $created['profiles'][] = $profile->id;
             }
 
-            foreach ($this->newsPayload() as $row) {
+            foreach ($dataset['news'] as $row) {
                 $exists = News::where('slug', $row['slug'])->exists();
                 if ($exists) {
                     continue;
@@ -86,10 +87,10 @@ class DemoDataService
                     'content' => $row['content'],
                     'category_id' => $categoryId,
                     'user_id' => $editorId,
-                    'status' => 'published',
+                    'status' => $row['status'] ?? 'published',
                     'is_breaking' => $row['is_breaking'] ?? false,
                     'is_featured' => $row['is_featured'] ?? false,
-                    'published_at' => now()->subDays($row['days_ago'] ?? 1),
+                    'published_at' => $row['published_at'] ?? now()->subDays($row['days_ago'] ?? 1),
                 ]);
 
                 $created['news'][] = $news->id;
@@ -135,6 +136,34 @@ class DemoDataService
         return $deleted;
     }
 
+    private function demoDataset(): array
+    {
+        $relativePath = config('demo_data.file', 'database/demo/demo-data.json');
+        $path = base_path($relativePath);
+        if (!is_file($path)) {
+            return [
+                'categories' => [],
+                'editors' => [],
+                'news' => [],
+            ];
+        }
+
+        $decoded = json_decode((string) file_get_contents($path), true);
+        if (!is_array($decoded)) {
+            return [
+                'categories' => [],
+                'editors' => [],
+                'news' => [],
+            ];
+        }
+
+        return [
+            'categories' => is_array($decoded['categories'] ?? null) ? $decoded['categories'] : [],
+            'editors' => is_array($decoded['editors'] ?? null) ? $decoded['editors'] : [],
+            'news' => is_array($decoded['news'] ?? null) ? $decoded['news'] : [],
+        ];
+    }
+
     private function persistTrackingIds(array $newIds): void
     {
         $old = $this->getTrackingIds();
@@ -178,55 +207,4 @@ class DemoDataService
         ];
     }
 
-    private function categoriesPayload(): array
-    {
-        return [
-            ['name' => 'Gundem', 'slug' => 'gundem', 'description' => 'Guncel gelismeler', 'order' => 1, 'is_active' => true],
-            ['name' => 'Spor', 'slug' => 'spor', 'description' => 'Spor haberleri', 'order' => 2, 'is_active' => true],
-            ['name' => 'Ekonomi', 'slug' => 'ekonomi', 'description' => 'Ekonomi haberleri', 'order' => 3, 'is_active' => true],
-        ];
-    }
-
-    private function editorsPayload(): array
-    {
-        return [
-            [
-                'name' => 'Demo Editor 1',
-                'email' => 'demo.editor1@rehagazetesi.local',
-                'title' => 'Muhabir',
-                'bio' => 'Demo amacli olusturulan editor hesabi.',
-            ],
-            [
-                'name' => 'Demo Editor 2',
-                'email' => 'demo.editor2@rehagazetesi.local',
-                'title' => 'Yazar',
-                'bio' => 'Panel testleri icin olusturulan demo yazar.',
-            ],
-        ];
-    }
-
-    private function newsPayload(): array
-    {
-        return [
-            [
-                'title' => 'Demo Gundem Haberi',
-                'slug' => Str::slug('Demo Gundem Haberi'),
-                'excerpt' => 'Demo gundem haberi ozeti.',
-                'content' => 'Bu icerik admin panel testleri icin otomatik olusturulmustur.',
-                'category_slug' => 'gundem',
-                'editor_email' => 'demo.editor1@rehagazetesi.local',
-                'is_breaking' => true,
-                'days_ago' => 1,
-            ],
-            [
-                'title' => 'Demo Spor Analizi',
-                'slug' => Str::slug('Demo Spor Analizi'),
-                'excerpt' => 'Demo spor haberi ozeti.',
-                'content' => 'Bu spor icerigi sadece demo ve test amaciyla eklenmistir.',
-                'category_slug' => 'spor',
-                'editor_email' => 'demo.editor2@rehagazetesi.local',
-                'days_ago' => 2,
-            ],
-        ];
-    }
 }

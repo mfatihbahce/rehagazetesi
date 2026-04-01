@@ -1,0 +1,62 @@
+{
+  "categories": [
+    {
+      "name": "Gundem",
+      "slug": "gundem",
+      "description": "Guncel gelismeler",
+      "order": 1,
+      "is_active": true
+    },
+    {
+      "name": "Spor",
+      "slug": "spor",
+      "description": "Spor haberleri",
+      "order": 2,
+      "is_active": true
+    }
+  ],
+  "editors": [
+    {
+      "name": "Demo Editor 1",
+      "email": "demo.editor1@rehagazetesi.local",
+      "password": "123456",
+      "role": "editor",
+      "title": "Muhabir",
+      "bio": "Demo amacli olusturulan editor hesabi."
+    },
+    {
+      "name": "Demo Editor 2",
+      "email": "demo.editor2@rehagazetesi.local",
+      "password": "123456",
+      "role": "editor",
+      "title": "Yazar",
+      "bio": "Panel testleri icin olusturulan demo yazar."
+    }
+  ],
+  "news": [
+    {
+      "title": "Demo Gundem Haberi",
+      "slug": "demo-gundem-haberi",
+      "excerpt": "Demo gundem haberi ozeti.",
+      "content": "<p>Bu icerik admin panel testleri icin otomatik olusturulmustur.</p>",
+      "category_slug": "gundem",
+      "editor_email": "demo.editor1@rehagazetesi.local",
+      "status": "published",
+      "is_breaking": true,
+      "is_featured": true,
+      "days_ago": 1
+    },
+    {
+      "title": "Demo Spor Analizi",
+      "slug": "demo-spor-analizi",
+      "excerpt": "Demo spor haberi ozeti.",
+      "content": "<p>Bu spor icerigi sadece demo ve test amaciyla eklenmistir.</p>",
+      "category_slug": "spor",
+      "editor_email": "demo.editor2@rehagazetesi.local",
+      "status": "published",
+      "is_breaking": false,
+      "is_featured": false,
+      "days_ago": 2
+    }
+  ]
+}
