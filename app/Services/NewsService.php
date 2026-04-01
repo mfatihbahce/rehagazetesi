@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Helpers\CacheKeys;
+use App\Models\ArchiveNews;
 use App\Models\News;
 use App\Models\User;
 use App\Repositories\Contracts\NewsRepositoryInterface;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class NewsService
@@ -56,9 +58,44 @@ class NewsService
 
     public function getNewsByAuthor(int $userId): array
     {
+        $author = User::with('editorProfile')->findOrFail($userId);
+
+        if (
+            config('archive.enabled') &&
+            $author->can_access_archive &&
+            $author->legacy_user_id
+        ) {
+            $authorKey = config('archive.columns.news.author_key', 'user_id');
+            $titleColumn = config('archive.columns.news.title', 'title');
+            $slugColumn = config('archive.columns.news.slug', 'slug');
+            $statusColumn = config('archive.columns.news.status', 'status');
+            $publishedAtColumn = config('archive.columns.news.published_at', 'created_at');
+            $primaryKey = config('archive.columns.news.primary_key', 'id');
+
+            $news = ArchiveNews::query()
+                ->where($authorKey, $author->legacy_user_id)
+                ->whereIn($statusColumn, ['publish', 'published'])
+                ->select([
+                    DB::raw("{$primaryKey} as id"),
+                    DB::raw("{$titleColumn} as title"),
+                    DB::raw("{$slugColumn} as slug"),
+                    DB::raw("{$statusColumn} as status"),
+                    DB::raw("{$publishedAtColumn} as published_at"),
+                ])
+                ->orderByDesc($publishedAtColumn)
+                ->paginate(12);
+
+            return [
+                'author' => $author,
+                'news' => $news,
+                'usesArchiveNews' => true,
+            ];
+        }
+
         return [
-            'author' => User::with('editorProfile')->findOrFail($userId),
+            'author' => $author,
             'news' => $this->newsRepository->paginateByAuthor($userId),
+            'usesArchiveNews' => false,
         ];
     }
 

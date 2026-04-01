@@ -24,6 +24,30 @@
     </div>
 
     <h2 class="text-xl font-bold text-black mb-6 border-b-2 border-[#BB0A30] pb-2 inline-block">{{ $author->name }}'in Haberleri</h2>
+    @if(!empty($usesArchiveNews) && $usesArchiveNews)
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="text-left p-4">Başlık</th>
+                    <th class="text-left p-4">Durum</th>
+                    <th class="text-left p-4">Tarih</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($news as $item)
+                <tr class="border-t">
+                    <td class="p-4">{{ $item->title ?: '-' }}</td>
+                    <td class="p-4">{{ $item->status ?: '-' }}</td>
+                    <td class="p-4">{{ $item->published_at ?: '-' }}</td>
+                </tr>
+                @empty
+                <tr><td colspan="3" class="p-8 text-center text-gray-500">Bu editörün arşivde yayınlanmış haberi yok.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    @else
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         @forelse($news as $item)
         <x-news-card :news="$item" />
@@ -31,6 +55,7 @@
         <p class="col-span-full text-gray-500 py-12 text-center">Bu editörün henüz yayınlanmış haberi yok.</p>
         @endforelse
     </div>
+    @endif
 
     <div class="mt-8">
         {{ $news->links() }}
