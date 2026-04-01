@@ -15,8 +15,8 @@
             </div>
             @endif
             <div>
-                <div class="flex items-center gap-2 flex-wrap">
-                    <h3 class="font-bold text-lg group-hover:text-[#BB0A30]">{{ $editor->name }}</h3>
+                <h3 class="font-bold text-lg group-hover:text-[#BB0A30]">{{ $editor->name }}</h3>
+                <div class="flex items-center gap-2 flex-wrap mt-1">
                     @if($editor->is_chief_columnist)
                     <span class="text-[10px] uppercase tracking-wide bg-amber-100 text-amber-700 px-2 py-0.5 rounded">Baş Köşe Yazarı</span>
                     @endif

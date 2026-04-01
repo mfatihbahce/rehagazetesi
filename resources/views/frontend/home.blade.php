@@ -108,12 +108,10 @@
             </div>
             @endif
             <div class="min-w-0">
-                <div class="flex items-center gap-2">
-                    <span class="font-semibold text-gray-900 group-hover:text-[#BB0A30] block truncate">{{ $editor->name }}</span>
-                    @if($editor->is_chief_columnist)
-                    <span class="text-[10px] uppercase tracking-wide bg-amber-100 text-amber-700 px-2 py-0.5 rounded">Baş Köşe</span>
-                    @endif
-                </div>
+                <span class="font-semibold text-gray-900 group-hover:text-[#BB0A30] block truncate">{{ $editor->name }}</span>
+                @if($editor->is_chief_columnist)
+                <span class="text-[10px] uppercase tracking-wide bg-amber-100 text-amber-700 px-2 py-0.5 rounded inline-block mt-1">Baş Köşe</span>
+                @endif
                 @if($editor->editorProfile?->title)
                 <span class="text-xs text-gray-500 truncate block">{{ $editor->editorProfile->title }}</span>
                 @endif
