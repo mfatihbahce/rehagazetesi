@@ -54,9 +54,12 @@
             }
         @endphp
         <a href="{{ $archiveUrl }}" target="_blank" rel="noopener noreferrer" class="group block bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 hover:border-gray-200 transition-all duration-300">
-            <div class="aspect-video overflow-hidden bg-gray-100">
+            <div class="aspect-video overflow-hidden bg-gray-100 relative">
                 @if($coverImage)
-                <img src="{{ $coverImage }}" alt="{{ $item->title ?: 'Başlık yok' }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                <img src="{{ $coverImage }}" alt="{{ $item->title ?: 'Başlık yok' }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="w-full h-full items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 text-gray-600 text-sm font-medium px-4 text-center hidden">
+                    Gorsel yok
+                </div>
                 @else
                 <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 text-gray-600 text-sm font-medium px-4 text-center">
                     Gorsel yok
