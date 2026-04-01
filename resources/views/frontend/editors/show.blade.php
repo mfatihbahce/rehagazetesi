@@ -40,17 +40,13 @@
                     <td class="p-4">
                         @php
                             $archiveBaseUrl = rtrim(config('archive.site_url', 'https://arsiv.rehagazetesi.com'), '/');
+                            $newsPathPrefix = trim((string) config('archive.news_path_prefix', 'kose-yazilari'), '/');
                             $archiveUrl = null;
 
-                            if (!empty($item->guid) && filter_var($item->guid, FILTER_VALIDATE_URL)) {
+                            if (!empty($item->slug)) {
+                                $archiveUrl = $archiveBaseUrl . '/' . ($newsPathPrefix !== '' ? $newsPathPrefix . '/' : '') . ltrim($item->slug, '/') . '/';
+                            } elseif (!empty($item->guid) && filter_var($item->guid, FILTER_VALIDATE_URL)) {
                                 $archiveUrl = $item->guid;
-                            } elseif (!empty($item->slug)) {
-                                $postType = trim((string) ($item->post_type ?? ''));
-                                if ($postType !== '' && !in_array($postType, ['post', 'page'], true)) {
-                                    $archiveUrl = $archiveBaseUrl . '/' . trim($postType, '/') . '/' . ltrim($item->slug, '/') . '/';
-                                } else {
-                                    $archiveUrl = $archiveBaseUrl . '/' . ltrim($item->slug, '/') . '/';
-                                }
                             } else {
                                 $archiveUrl = $archiveBaseUrl . '/?p=' . $item->id;
                             }

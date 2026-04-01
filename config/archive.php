@@ -3,6 +3,7 @@
 return [
     'enabled' => env('ARCHIVE_ENABLED', false),
     'site_url' => env('ARCHIVE_SITE_URL', 'https://arsiv.rehagazetesi.com'),
+    'news_path_prefix' => env('ARCHIVE_NEWS_PATH_PREFIX', 'kose-yazilari'),
 
     'tables' => [
         'users' => env('ARCHIVE_USERS_TABLE', 'users'),
