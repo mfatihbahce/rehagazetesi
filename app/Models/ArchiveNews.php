@@ -15,7 +15,7 @@ class ArchiveNews extends Model
         return config('archive.tables.news', 'news');
     }
 
-    protected function getKeyName()
+    public function getKeyName()
     {
         return config('archive.columns.news.primary_key', 'id');
     }
