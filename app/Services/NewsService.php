@@ -39,6 +39,9 @@ class NewsService
                     ->with('editorProfile')
                     ->where('can_access_archive', true)
                     ->whereNotNull('legacy_user_id')
+                    ->orderByDesc('is_chief_columnist')
+                    ->orderByRaw('CASE WHEN editor_order IS NULL THEN 1 ELSE 0 END')
+                    ->orderBy('editor_order')
                     ->orderBy('name')
                     ->limit(4)
                     ->get(),

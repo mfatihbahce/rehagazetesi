@@ -20,6 +20,8 @@
                 <th class="text-left p-4">Ad</th>
                 <th class="text-left p-4">E-posta</th>
                 <th class="text-left p-4">Unvan</th>
+                <th class="text-left p-4">Sıra</th>
+                <th class="text-left p-4">Baş Köşe</th>
                 <th class="text-left p-4">Arşiv ID</th>
                 <th class="text-left p-4">Arşiv Erişimi</th>
                 <th class="text-left p-4">Haber Sayısı</th>
@@ -32,6 +34,8 @@
                 <td class="p-4 font-medium">{{ $editor->name }}</td>
                 <td class="p-4">{{ $editor->email }}</td>
                 <td class="p-4">{{ $editor->editorProfile?->title ?? '-' }}</td>
+                <td class="p-4">{{ $editor->editor_order ?? '-' }}</td>
+                <td class="p-4">{{ $editor->is_chief_columnist ? 'Evet' : 'Hayır' }}</td>
                 <td class="p-4">{{ $editor->legacy_user_id ?? '-' }}</td>
                 <td class="p-4">{{ $editor->can_access_archive ? 'Açık' : 'Kapalı' }}</td>
                 <td class="p-4">{{ $editor->news_count }}</td>
@@ -47,7 +51,7 @@
                 </td>
             </tr>
             @empty
-            <tr><td colspan="7" class="p-8 text-center text-gray-500">Editör bulunamadı.</td></tr>
+            <tr><td colspan="9" class="p-8 text-center text-gray-500">Editör bulunamadı.</td></tr>
             @endforelse
         </tbody>
     </table>

@@ -99,7 +99,7 @@
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         @foreach($editors->take(8) as $editor)
-        <a href="{{ route('editor.show', $editor->id) }}" class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition p-4 flex items-center gap-3">
+        <a href="{{ route('editor.show', $editor->id) }}" class="group rounded-xl shadow-sm hover:shadow-md transition p-4 flex items-center gap-3 {{ $editor->is_chief_columnist ? 'bg-gradient-to-r from-amber-50 to-white border border-amber-200' : 'bg-white border border-gray-100' }}">
             @if($editor->editorProfile?->profile_photo)
             <img src="{{ asset('storage/'.$editor->editorProfile->profile_photo) }}" alt="{{ $editor->name }}" class="w-12 h-12 rounded-full object-cover shrink-0">
             @else
@@ -108,7 +108,12 @@
             </div>
             @endif
             <div class="min-w-0">
-                <span class="font-semibold text-gray-900 group-hover:text-[#BB0A30] block truncate">{{ $editor->name }}</span>
+                <div class="flex items-center gap-2">
+                    <span class="font-semibold text-gray-900 group-hover:text-[#BB0A30] block truncate">{{ $editor->name }}</span>
+                    @if($editor->is_chief_columnist)
+                    <span class="text-[10px] uppercase tracking-wide bg-amber-100 text-amber-700 px-2 py-0.5 rounded">Baş Köşe</span>
+                    @endif
+                </div>
                 @if($editor->editorProfile?->title)
                 <span class="text-xs text-gray-500 truncate block">{{ $editor->editorProfile->title }}</span>
                 @endif

@@ -39,9 +39,18 @@
             <input type="number" name="legacy_user_id" min="1" value="{{ old('legacy_user_id') }}" class="w-full border rounded-lg px-4 py-2 @error('legacy_user_id') border-red-500 @enderror" placeholder="arsiv.rehagazetesi kullanıcı id">
             @error('legacy_user_id')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Sıra</label>
+            <input type="number" name="editor_order" min="1" max="9999" value="{{ old('editor_order') }}" class="w-full border rounded-lg px-4 py-2 @error('editor_order') border-red-500 @enderror" placeholder="Örn: 1, 2, 3... (boşsa otomatik)">
+            @error('editor_order')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+        </div>
         <div class="flex items-center gap-2">
             <input type="checkbox" id="can_access_archive" name="can_access_archive" value="1" @checked(old('can_access_archive')) class="rounded border-gray-300 text-red-600 focus:ring-red-500">
             <label for="can_access_archive" class="text-sm text-gray-700">Arşiv yazılarına erişebilsin</label>
+        </div>
+        <div class="flex items-center gap-2">
+            <input type="checkbox" id="is_chief_columnist" name="is_chief_columnist" value="1" @checked(old('is_chief_columnist')) class="rounded border-gray-300 text-red-600 focus:ring-red-500">
+            <label for="is_chief_columnist" class="text-sm text-gray-700">Baş Köşe Yazarı</label>
         </div>
     </div>
     <div class="mt-6 flex gap-4">

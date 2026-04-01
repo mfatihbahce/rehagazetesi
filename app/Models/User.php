@@ -24,6 +24,8 @@ class User extends Authenticatable
         'role',
         'legacy_user_id',
         'can_access_archive',
+        'editor_order',
+        'is_chief_columnist',
     ];
 
     /**
@@ -45,6 +47,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'can_access_archive' => 'boolean',
+        'is_chief_columnist' => 'boolean',
     ];
 
     /**

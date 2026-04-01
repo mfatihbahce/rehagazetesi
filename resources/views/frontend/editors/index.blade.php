@@ -5,7 +5,7 @@
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
     @forelse($editors as $editor)
-    <a href="{{ route('editor.show', $editor->id) }}" class="group block bg-white rounded-xl shadow hover:shadow-lg transition p-6">
+    <a href="{{ route('editor.show', $editor->id) }}" class="group block rounded-xl shadow hover:shadow-lg transition p-6 {{ $editor->is_chief_columnist ? 'bg-gradient-to-br from-amber-50 to-white border border-amber-200' : 'bg-white' }}">
         <div class="flex items-start gap-4">
             @if($editor->editorProfile?->profile_photo)
             <img src="{{ asset('storage/'.$editor->editorProfile->profile_photo) }}" alt="{{ $editor->name }}" class="w-20 h-20 rounded-full object-cover">
@@ -15,7 +15,15 @@
             </div>
             @endif
             <div>
-                <h3 class="font-bold text-lg group-hover:text-[#BB0A30]">{{ $editor->name }}</h3>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <h3 class="font-bold text-lg group-hover:text-[#BB0A30]">{{ $editor->name }}</h3>
+                    @if($editor->is_chief_columnist)
+                    <span class="text-[10px] uppercase tracking-wide bg-amber-100 text-amber-700 px-2 py-0.5 rounded">Baş Köşe Yazarı</span>
+                    @endif
+                    @if($editor->editor_order)
+                    <span class="text-[10px] uppercase tracking-wide bg-gray-100 text-gray-600 px-2 py-0.5 rounded">Sıra: {{ $editor->editor_order }}</span>
+                    @endif
+                </div>
                 @if($editor->editorProfile?->title)
                 <p class="text-sm text-gray-600">{{ $editor->editorProfile->title }}</p>
                 @endif

@@ -21,6 +21,9 @@ class EditorController extends Controller
         $editors = User::where('role', 'editor')
             ->with(['editorProfile', 'news'])
             ->withCount('news')
+            ->orderByDesc('is_chief_columnist')
+            ->orderByRaw('CASE WHEN editor_order IS NULL THEN 1 ELSE 0 END')
+            ->orderBy('editor_order')
             ->orderBy('name')
             ->get();
 
@@ -42,6 +45,8 @@ class EditorController extends Controller
             'bio' => ['nullable', 'string'],
             'legacy_user_id' => ['nullable', 'integer', 'min:1'],
             'can_access_archive' => ['nullable', 'boolean'],
+            'editor_order' => ['nullable', 'integer', 'min:1', 'max:9999'],
+            'is_chief_columnist' => ['nullable', 'boolean'],
         ]);
 
         $user = User::create([
@@ -51,6 +56,8 @@ class EditorController extends Controller
             'role' => 'editor',
             'legacy_user_id' => $validated['legacy_user_id'] ?? null,
             'can_access_archive' => (bool) ($validated['can_access_archive'] ?? false),
+            'editor_order' => isset($validated['editor_order']) ? (int) $validated['editor_order'] : random_int(100, 9999),
+            'is_chief_columnist' => (bool) ($validated['is_chief_columnist'] ?? false),
         ]);
 
         EditorProfile::create([
@@ -87,12 +94,16 @@ class EditorController extends Controller
             'bio' => ['nullable', 'string'],
             'legacy_user_id' => ['nullable', 'integer', 'min:1'],
             'can_access_archive' => ['nullable', 'boolean'],
+            'editor_order' => ['nullable', 'integer', 'min:1', 'max:9999'],
+            'is_chief_columnist' => ['nullable', 'boolean'],
         ]);
 
         $editor->name = $validated['name'];
         $editor->email = $validated['email'];
         $editor->legacy_user_id = $validated['legacy_user_id'] ?? null;
         $editor->can_access_archive = (bool) ($validated['can_access_archive'] ?? false);
+        $editor->editor_order = isset($validated['editor_order']) ? (int) $validated['editor_order'] : random_int(100, 9999);
+        $editor->is_chief_columnist = (bool) ($validated['is_chief_columnist'] ?? false);
         if (!empty($validated['password'])) {
             $editor->password = Hash::make($validated['password']);
         }
