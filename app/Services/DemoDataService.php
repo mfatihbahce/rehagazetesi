@@ -88,8 +88,11 @@ class DemoDataService
                     'category_id' => $categoryId,
                     'user_id' => $editorId,
                     'status' => $row['status'] ?? 'published',
+                    'featured_image' => $row['featured_image'] ?? null,
+                    'tags' => $row['tags'] ?? null,
                     'is_breaking' => $row['is_breaking'] ?? false,
                     'is_featured' => $row['is_featured'] ?? false,
+                    'views' => (int) ($row['views'] ?? 0),
                     'published_at' => $row['published_at'] ?? now()->subDays($row['days_ago'] ?? 1),
                 ]);
 
