@@ -63,6 +63,25 @@ return [
             ]) : [],
         ],
 
+        'archive' => [
+            'driver' => 'mysql',
+            'host' => env('ARCHIVE_DB_HOST', env('DB_HOST', '127.0.0.1')),
+            'port' => env('ARCHIVE_DB_PORT', env('DB_PORT', '3306')),
+            'database' => env('ARCHIVE_DB_DATABASE', ''),
+            'username' => env('ARCHIVE_DB_USERNAME', ''),
+            'password' => env('ARCHIVE_DB_PASSWORD', ''),
+            'unix_socket' => env('ARCHIVE_DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => env('ARCHIVE_DB_PREFIX', ''),
+            'prefix_indexes' => true,
+            'strict' => false,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('ARCHIVE_MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),

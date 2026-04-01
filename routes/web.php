@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EditorController as AdminEditorController;
+use App\Http\Controllers\Admin\ArchiveNewsController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\Admin\SettingsController;
@@ -52,6 +53,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware(['auth', 'admin.panel'])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/archive-news', [ArchiveNewsController::class, 'index'])->name('archive-news.index');
 
         Route::resource('news', AdminNewsController::class)->names('news')->except(['show']);
         Route::post('news/{news}/approve', [AdminNewsController::class, 'approve'])->name('news.approve');

@@ -40,6 +40,8 @@ class EditorController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'title' => ['nullable', 'string', 'max:255'],
             'bio' => ['nullable', 'string'],
+            'legacy_user_id' => ['nullable', 'integer', 'min:1'],
+            'can_access_archive' => ['nullable', 'boolean'],
         ]);
 
         $user = User::create([
@@ -47,6 +49,8 @@ class EditorController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => 'editor',
+            'legacy_user_id' => $validated['legacy_user_id'] ?? null,
+            'can_access_archive' => (bool) ($validated['can_access_archive'] ?? false),
         ]);
 
         EditorProfile::create([
@@ -81,10 +85,14 @@ class EditorController extends Controller
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'title' => ['nullable', 'string', 'max:255'],
             'bio' => ['nullable', 'string'],
+            'legacy_user_id' => ['nullable', 'integer', 'min:1'],
+            'can_access_archive' => ['nullable', 'boolean'],
         ]);
 
         $editor->name = $validated['name'];
         $editor->email = $validated['email'];
+        $editor->legacy_user_id = $validated['legacy_user_id'] ?? null;
+        $editor->can_access_archive = (bool) ($validated['can_access_archive'] ?? false);
         if (!empty($validated['password'])) {
             $editor->password = Hash::make($validated['password']);
         }

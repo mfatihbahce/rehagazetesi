@@ -20,6 +20,8 @@
                 <th class="text-left p-4">Ad</th>
                 <th class="text-left p-4">E-posta</th>
                 <th class="text-left p-4">Unvan</th>
+                <th class="text-left p-4">Arşiv ID</th>
+                <th class="text-left p-4">Arşiv Erişimi</th>
                 <th class="text-left p-4">Haber Sayısı</th>
                 <th class="text-right p-4">İşlemler</th>
             </tr>
@@ -30,13 +32,15 @@
                 <td class="p-4 font-medium">{{ $editor->name }}</td>
                 <td class="p-4">{{ $editor->email }}</td>
                 <td class="p-4">{{ $editor->editorProfile?->title ?? '-' }}</td>
+                <td class="p-4">{{ $editor->legacy_user_id ?? '-' }}</td>
+                <td class="p-4">{{ $editor->can_access_archive ? 'Açık' : 'Kapalı' }}</td>
                 <td class="p-4">{{ $editor->news_count }}</td>
                 <td class="p-4 text-right">
                     <a href="{{ route('admin.editors.edit', $editor) }}" class="text-red-600 hover:text-red-800 font-medium">Düzenle</a>
                 </td>
             </tr>
             @empty
-            <tr><td colspan="5" class="p-8 text-center text-gray-500">Editör bulunamadı.</td></tr>
+            <tr><td colspan="7" class="p-8 text-center text-gray-500">Editör bulunamadı.</td></tr>
             @endforelse
         </tbody>
     </table>

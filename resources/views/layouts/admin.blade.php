@@ -49,6 +49,12 @@
                         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         <span>Yeni Haber Ekle</span>
                     </a>
+                    @if(auth()->user()->isEditor() && auth()->user()->can_access_archive)
+                    <a href="{{ route('admin.archive-news.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-700/50 {{ request()->routeIs('admin.archive-news.*') ? 'bg-slate-700 text-white' : '' }}">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2m5-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>Arşiv Yazılarım</span>
+                    </a>
+                    @endif
                     @auth
                     @if(auth()->user()->isAdmin())
                     <a href="{{ route('admin.news.index', ['status' => 'pending']) }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-700/50 {{ request('status') === 'pending' ? 'bg-slate-700 text-white' : '' }}">
