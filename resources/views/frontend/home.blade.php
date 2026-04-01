@@ -91,6 +91,34 @@
     </div>
 </section>
 
+@if(isset($editors) && $editors->isNotEmpty())
+<section class="mb-10" id="editorler-yatay">
+    <div class="flex items-center justify-between mb-5">
+        <h2 class="text-lg sm:text-xl font-bold text-gray-900 border-b-2 border-[#BB0A30] pb-2 inline-block">Editörler</h2>
+        <a href="{{ route('editors.index') }}" class="text-[#BB0A30] text-sm font-semibold hover:underline">Tümü →</a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        @foreach($editors->take(8) as $editor)
+        <a href="{{ route('editor.show', $editor->id) }}" class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition p-4 flex items-center gap-3">
+            @if($editor->editorProfile?->profile_photo)
+            <img src="{{ asset('storage/'.$editor->editorProfile->profile_photo) }}" alt="{{ $editor->name }}" class="w-12 h-12 rounded-full object-cover shrink-0">
+            @else
+            <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center shrink-0 group-hover:bg-[#BB0A30]/10 transition-colors">
+                <svg class="w-6 h-6 text-gray-500 group-hover:text-[#BB0A30]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            </div>
+            @endif
+            <div class="min-w-0">
+                <span class="font-semibold text-gray-900 group-hover:text-[#BB0A30] block truncate">{{ $editor->name }}</span>
+                @if($editor->editorProfile?->title)
+                <span class="text-xs text-gray-500 truncate block">{{ $editor->editorProfile->title }}</span>
+                @endif
+            </div>
+        </a>
+        @endforeach
+    </div>
+</section>
+@endif
+
 <div class="flex flex-col lg:flex-row gap-10">
     <div class="flex-1 min-w-0">
         {{-- Kategori blokları --}}
@@ -124,38 +152,6 @@
     </div>
 
     <aside class="lg:w-80 xl:w-80 shrink-0 space-y-6">
-        {{-- Editörler kartı --}}
-        @if(isset($editors) && $editors->isNotEmpty())
-        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-            <div class="flex items-center justify-between mb-5">
-                <h3 class="font-bold text-gray-900 text-lg pb-2 border-b-2 border-[#BB0A30] inline-block">Editörler</h3>
-                <a href="{{ route('editors.index') }}" class="text-[#BB0A30] text-sm font-semibold hover:underline">Tümü</a>
-            </div>
-            <ul class="space-y-4">
-                @foreach($editors->take(4) as $editor)
-                <li>
-                    <a href="{{ route('editor.show', $editor->id) }}" class="flex items-center gap-3 group">
-                        @if($editor->editorProfile?->profile_photo)
-                        <img src="{{ asset('storage/'.$editor->editorProfile->profile_photo) }}" alt="{{ $editor->name }}" class="w-12 h-12 rounded-full object-cover shrink-0">
-                        @else
-                        <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center shrink-0 group-hover:bg-[#BB0A30]/10 transition-colors">
-                            <svg class="w-6 h-6 text-gray-500 group-hover:text-[#BB0A30]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                        </div>
-                        @endif
-                        <div class="min-w-0">
-                            <span class="font-medium group-hover:text-[#BB0A30] block truncate">{{ $editor->name }}</span>
-                            @if($editor->editorProfile?->title)
-                            <span class="text-xs text-gray-500 truncate block">{{ $editor->editorProfile->title }}</span>
-                            @endif
-                        </div>
-                    </a>
-                </li>
-                @endforeach
-            </ul>
-            <a href="{{ route('editors.index') }}" class="mt-4 block text-center text-[#BB0A30] text-sm font-semibold hover:underline">Tüm Editörleri Görüntüle</a>
-        </div>
-        @endif
-
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 lg:sticky lg:top-32">
             <h3 class="font-bold text-gray-900 text-lg mb-5 pb-2 border-b-2 border-[#BB0A30] inline-block">En Çok Okunanlar</h3>
             <ul class="space-y-4">
