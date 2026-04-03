@@ -190,6 +190,12 @@ class NewsService
         if (!$user->isAdmin()) {
             unset($data['is_breaking'], $data['is_featured'], $data['status']);
         }
+        if ($user->isAdmin()) {
+            $newStatus = $data['status'] ?? $news->status;
+            if ($newStatus === 'published' && $news->published_at === null) {
+                $data['published_at'] = now();
+            }
+        }
         if (isset($data['featured_image']) && $data['featured_image'] instanceof UploadedFile) {
             $data['featured_image'] = $this->mediaService->uploadNewsImage($data['featured_image']);
         } elseif (!empty($data['featured_image_path'])) {
