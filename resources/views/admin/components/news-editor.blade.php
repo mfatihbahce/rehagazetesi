@@ -110,6 +110,8 @@ document.addEventListener('DOMContentLoaded', function() {
         selector: '#content-editor',
         height: 400,
         menubar: false,
+        language: 'tr',
+        language_url: 'https://cdn.jsdelivr.net/npm/tinymce-i18n@26.3.23/langs6/tr.js',
         base_url: 'https://cdn.jsdelivr.net/npm/tinymce@6',
         suffix: '.min',
         plugins: 'lists link code table paste',
