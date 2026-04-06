@@ -112,8 +112,9 @@ document.addEventListener('DOMContentLoaded', function() {
         menubar: false,
         base_url: 'https://cdn.jsdelivr.net/npm/tinymce@6',
         suffix: '.min',
-        plugins: 'lists link code table',
+        plugins: 'lists link code table paste',
         toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist | link | customimage medialibrary | videoembed videoupload | code',
+        contextmenu: 'cut copy paste pastetext | link table lists',
         content_style: 'body { font-family: Inter, sans-serif; font-size: 16px; }',
         setup: function(editor) {
             editor.ui.registry.addButton('customimage', {
