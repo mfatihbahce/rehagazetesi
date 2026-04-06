@@ -116,8 +116,10 @@ document.addEventListener('DOMContentLoaded', function() {
         suffix: '.min',
         plugins: 'lists link code table paste',
         toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist | link | customimage medialibrary | videoembed videoupload | code',
-        /* paste/pastetext menüde yok: iframe içinde programatik pano okunamıyor ve TinyMCE uyarı gösteriyor. Yapıştırma: Ctrl+V */
-        contextmenu: 'cut copy | link table lists',
+        contextmenu: 'cut copy paste pastetext | link table lists',
+        iframe_attrs: {
+            allow: 'clipboard-read; clipboard-write'
+        },
         content_style: 'body { font-family: Inter, sans-serif; font-size: 16px; }',
         setup: function(editor) {
             editor.ui.registry.addButton('customimage', {
