@@ -15,6 +15,10 @@
                 <svg class="w-5 h-5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 Genel
             </a>
+            <a href="#marka" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700">
+                <svg class="w-5 h-5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                Logo ve favicon
+            </a>
             <a href="#sosyal" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700">
                 <svg class="w-5 h-5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                 Sosyal Medya
@@ -72,6 +76,38 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Anahtar Kelimeler</label>
                     <input type="text" name="site_keywords" value="{{ old('site_keywords', $settings['site_keywords'] ?? '') }}" class="w-full border rounded-lg px-4 py-2" placeholder="yerel haber, haber, gazete">
                 </div>
+
+                <div id="marka" class="pt-6 mt-2 border-t border-gray-200 scroll-mt-24">
+                    <h4 class="text-sm font-semibold text-gray-800 mb-3">Logo ve favicon</h4>
+                    <p class="text-xs text-gray-500 mb-4">Header ve footerda kullanılan logo ile tarayıcı sekmesindeki favicon. Dosya seçmezseniz mevcut görseller korunur.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Site logosu</label>
+                            @if(!empty($settings['logo_url'] ?? ''))
+                            <div class="mb-3 p-3 bg-gray-50 rounded-lg border border-gray-100 inline-block max-w-full">
+                                <img src="{{ (str_starts_with($settings['logo_url'], 'http') ? $settings['logo_url'] : asset('storage/' . $settings['logo_url'])) }}" alt="Mevcut logo" class="max-h-16 w-auto object-contain">
+                            </div>
+                            @else
+                            <p class="mb-3 text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">Henüz logo yüklenmemiş; headerda site adı metni gösterilir.</p>
+                            @endif
+                            <input type="file" name="logo" accept="image/jpeg,image/png,image/gif,image/webp" class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-[#BB0A30] file:text-white hover:file:bg-[#9d0828] cursor-pointer border border-gray-200 rounded-lg px-2 py-1.5">
+                            <p class="mt-1.5 text-xs text-gray-500">PNG, JPG, GIF veya WebP. En fazla 2 MB.</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Favicon</label>
+                            @if(!empty($settings['favicon_url'] ?? ''))
+                            <div class="mb-3 p-3 bg-gray-50 rounded-lg border border-gray-100 inline-flex items-center gap-3">
+                                <img src="{{ (str_starts_with($settings['favicon_url'], 'http') ? $settings['favicon_url'] : asset('storage/' . $settings['favicon_url'])) }}" alt="Mevcut favicon" class="h-10 w-10 object-contain">
+                                <span class="text-xs text-gray-600">Tarayıcı sekmesinde bu simge kullanılır.</span>
+                            </div>
+                            @else
+                            <p class="mb-3 text-xs text-gray-600 bg-gray-50 border border-gray-100 rounded-lg px-3 py-2">Favicon yoksa tarayıcı varsayılan simgesini gösterir.</p>
+                            @endif
+                            <input type="file" name="favicon" accept=".ico,image/x-icon,image/png,image/gif" class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-700 file:text-white hover:file:bg-gray-800 cursor-pointer border border-gray-200 rounded-lg px-2 py-1.5">
+                            <p class="mt-1.5 text-xs text-gray-500">ICO veya PNG (32×32 önerilir). En fazla 512 KB.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -123,25 +159,9 @@
         <section id="gorunum" class="bg-white rounded-xl shadow overflow-hidden">
             <div class="p-4 border-b bg-gray-50">
                 <h3 class="font-semibold text-gray-800">Görünüm</h3>
-                <p class="text-sm text-gray-500">Logo, favicon ve metinler</p>
+                <p class="text-sm text-gray-500">Footer metni (logo ve favicon yukarıda «Logo ve favicon» bölümündedir)</p>
             </div>
             <div class="p-6 space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Logo</label>
-                    @if(!empty($settings['logo_url'] ?? ''))
-                    <div class="mb-2"><img src="{{ (str_starts_with($settings['logo_url'], 'http') ? $settings['logo_url'] : asset('storage/' . $settings['logo_url'])) }}" alt="Logo" class="h-12 object-contain"></div>
-                    @endif
-                    <input type="file" name="logo" accept="image/jpeg,image/png,image/gif,image/webp" class="w-full border rounded-lg px-4 py-2 text-sm">
-                    <p class="mt-1 text-xs text-gray-500">PNG, JPG, GIF veya WebP. Boş bırakırsanız mevcut logo korunur.</p>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Favicon</label>
-                    @if(!empty($settings['favicon_url'] ?? ''))
-                    <div class="mb-2"><img src="{{ (str_starts_with($settings['favicon_url'], 'http') ? $settings['favicon_url'] : asset('storage/' . $settings['favicon_url'])) }}" alt="Favicon" class="h-8 w-8 object-contain"></div>
-                    @endif
-                    <input type="file" name="favicon" accept="image/x-icon,image/png,image/gif" class="w-full border rounded-lg px-4 py-2 text-sm">
-                    <p class="mt-1 text-xs text-gray-500">ICO veya PNG. 32x32 önerilir. Boş bırakırsanız mevcut favicon korunur.</p>
-                </div>
                 <div><label class="block text-sm font-medium text-gray-700 mb-1">Footer Metni</label><textarea name="footer_text" rows="2" class="w-full border rounded-lg px-4 py-2">{{ old('footer_text', $settings['footer_text'] ?? '') }}</textarea></div>
             </div>
         </section>
