@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Helpers\CacheKeys;
+use App\Models\Advertisement;
 use App\Repositories\CategoryRepository;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Contracts\NewsRepositoryInterface;
@@ -45,7 +46,65 @@ class AppServiceProvider extends ServiceProvider
                 }
                 return $items;
             });
+
+            $leftSidebarAds = Advertisement::query()
+                ->active()
+                ->where('placement', Advertisement::PLACEMENT_LEFT)
+                ->orderByDesc('priority')
+                ->orderByDesc('id')
+                ->limit(3)
+                ->get();
+
+            $rightSidebarAds = Advertisement::query()
+                ->active()
+                ->where('placement', Advertisement::PLACEMENT_RIGHT)
+                ->orderByDesc('priority')
+                ->orderByDesc('id')
+                ->limit(3)
+                ->get();
+
+            $renderedAdIds = $leftSidebarAds->pluck('id')
+                ->merge($rightSidebarAds->pluck('id'))
+                ->unique()
+                ->values();
+
+            if ($renderedAdIds->isNotEmpty()) {
+                Advertisement::whereIn('id', $renderedAdIds)->increment('impressions');
+            }
+
             $view->with('breakingNews', $breaking);
+            $view->with('leftSidebarAds', $leftSidebarAds);
+            $view->with('rightSidebarAds', $rightSidebarAds);
+        });
+
+        View::composer('frontend.home', function ($view) {
+            $mobileHomeLeftAds = Advertisement::query()
+                ->active()
+                ->where('placement', Advertisement::PLACEMENT_LEFT)
+                ->orderByDesc('priority')
+                ->orderByDesc('id')
+                ->limit(3)
+                ->get();
+
+            $mobileHomeRightAds = Advertisement::query()
+                ->active()
+                ->where('placement', Advertisement::PLACEMENT_RIGHT)
+                ->orderByDesc('priority')
+                ->orderByDesc('id')
+                ->limit(3)
+                ->get();
+
+            $mobileHomeAdIds = $mobileHomeLeftAds->pluck('id')
+                ->merge($mobileHomeRightAds->pluck('id'))
+                ->unique()
+                ->values();
+
+            if ($mobileHomeAdIds->isNotEmpty()) {
+                Advertisement::whereIn('id', $mobileHomeAdIds)->increment('impressions');
+            }
+
+            $view->with('mobileHomeLeftAds', $mobileHomeLeftAds);
+            $view->with('mobileHomeRightAds', $mobileHomeRightAds);
         });
 
         View::composer('layouts.admin', function ($view) {

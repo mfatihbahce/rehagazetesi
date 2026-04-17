@@ -7,7 +7,9 @@ use App\Http\Controllers\Admin\EditorController as AdminEditorController;
 use App\Http\Controllers\Admin\ArchiveNewsController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use App\Http\Controllers\Admin\AdvertisementController as AdminAdvertisementController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EditorController;
 use App\Http\Controllers\HomeController;
@@ -32,6 +34,7 @@ Route::get('/api/rates', [\App\Http\Controllers\RatesController::class, 'index']
 Route::get('/hava-durumu', [\App\Http\Controllers\WeatherController::class, 'show'])->name('weather.index');
 Route::get('/hava-durumu/{city}', [\App\Http\Controllers\WeatherController::class, 'show'])->name('weather.show');
 Route::get('/api/weather/{city?}', [\App\Http\Controllers\WeatherController::class, 'widget'])->name('api.weather');
+Route::get('/reklam/{advertisement}/tikla', [AdvertisementController::class, 'click'])->name('ads.click');
 Route::get('/hakkinda', [PageController::class, 'about'])->name('about');
 Route::get('/kunye', [PageController::class, 'imprint'])->name('imprint');
 Route::get('/künye', [PageController::class, 'imprint']);
@@ -72,6 +75,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('settings/demo/clear', [SettingsController::class, 'clearDemoData'])->name('settings.demo.clear');
             Route::resource('categories', AdminCategoryController::class)->names('categories')->except(['show']);
             Route::resource('editors', AdminEditorController::class)->names('editors')->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+            Route::resource('advertisements', AdminAdvertisementController::class)->names('advertisements')->except(['show']);
         });
     });
 });

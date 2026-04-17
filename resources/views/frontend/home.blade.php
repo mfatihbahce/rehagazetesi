@@ -77,6 +77,16 @@
 @endpush
 @endif
 
+@if(isset($mobileHomeLeftAds) && $mobileHomeLeftAds->isNotEmpty())
+<section class="lg:hidden mb-6" aria-label="Mobil reklam">
+    <div class="space-y-3">
+        @foreach($mobileHomeLeftAds as $ad)
+        <x-mobile-ad-banner :ad="$ad" />
+        @endforeach
+    </div>
+</section>
+@endif
+
 {{-- Haber kartları grid - responsive, modern --}}
 <section class="mb-12" id="haberler">
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 sm:gap-6">
@@ -91,6 +101,15 @@
 </section>
 
 @if(isset($editors) && $editors->isNotEmpty())
+@if(isset($mobileHomeRightAds) && $mobileHomeRightAds->isNotEmpty())
+<section class="lg:hidden mb-6" aria-label="Mobil reklam">
+    <div class="space-y-3">
+        @foreach($mobileHomeRightAds as $ad)
+        <x-mobile-ad-banner :ad="$ad" />
+        @endforeach
+    </div>
+</section>
+@endif
 <section class="mb-10" id="editorler-yatay">
     <div class="flex items-center justify-between mb-5">
         <h2 class="text-lg sm:text-xl font-bold text-gray-900 border-b-2 border-[#BB0A30] pb-2 inline-block">Yazarlar</h2>

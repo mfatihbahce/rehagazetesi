@@ -185,9 +185,86 @@
         </div>
     </header>
 
+    @php
+        $layoutAdEnabled = \App\Helpers\SettingsHelper::get('layout_ad_enabled', false);
+        $layoutAdDesktop = \App\Helpers\SettingsHelper::get('layout_ad_desktop_url', '');
+        $layoutAdMobile = \App\Helpers\SettingsHelper::get('layout_ad_mobile_url', '');
+        $layoutAdAlt = \App\Helpers\SettingsHelper::get('layout_ad_alt', '');
+    @endphp
+    @if($layoutAdEnabled && ($layoutAdDesktop || $layoutAdMobile))
+    <section class="bg-transparent" aria-label="Site üst reklam">
+        <div class="max-w-7xl mx-auto px-4 py-1">
+            @if($layoutAdMobile)
+            <div class="lg:hidden">
+                <img src="{{ asset('storage/' . $layoutAdMobile) }}" alt="{{ $layoutAdAlt }}" class="w-full h-auto max-h-[120px] object-contain mx-auto">
+            </div>
+            @endif
+            @if($layoutAdDesktop)
+            <div class="hidden lg:block">
+                <img src="{{ asset('storage/' . $layoutAdDesktop) }}" alt="{{ $layoutAdAlt }}" class="w-full h-auto max-h-[120px] object-contain mx-auto">
+            </div>
+            @elseif($layoutAdMobile)
+            <div class="hidden lg:block">
+                <img src="{{ asset('storage/' . $layoutAdMobile) }}" alt="{{ $layoutAdAlt }}" class="w-full h-auto max-h-[120px] object-contain mx-auto">
+            </div>
+            @endif
+        </div>
+    </section>
+    @endif
+
     <main class="flex-1 max-w-7xl mx-auto px-4 py-6 w-full">
         @yield('content')
     </main>
+
+    <div class="hidden lg:block">
+        <aside class="fixed left-2 top-[170px] bottom-4 w-[120px] z-40">
+            <div class="h-full overflow-y-auto space-y-3 pr-1">
+            @forelse(($leftSidebarAds ?? collect()) as $ad)
+            <div class="min-h-[600px] overflow-hidden">
+                @if($ad->type === 'html' && $ad->html_code)
+                {!! $ad->html_code !!}
+                @elseif($ad->image_url)
+                @if($ad->target_url)
+                <a href="{{ route('ads.click', $ad) }}" target="_blank" rel="nofollow sponsored noopener" class="block">
+                    <img src="{{ $ad->image_url }}" alt="{{ $ad->alt_text ?: $ad->title }}" class="w-full h-[600px] object-cover">
+                </a>
+                @else
+                <img src="{{ $ad->image_url }}" alt="{{ $ad->alt_text ?: $ad->title }}" class="w-full h-[600px] object-cover">
+                @endif
+                @endif
+            </div>
+            @empty
+            <div class="min-h-[600px] flex items-start justify-center text-[10px] text-gray-400/80 uppercase tracking-wide pt-1">
+                Sol reklam
+            </div>
+            @endforelse
+            </div>
+        </aside>
+
+        <aside class="fixed right-2 top-[170px] bottom-4 w-[120px] z-40">
+            <div class="h-full overflow-y-auto space-y-3 pl-1">
+            @forelse(($rightSidebarAds ?? collect()) as $ad)
+            <div class="min-h-[600px] overflow-hidden">
+                @if($ad->type === 'html' && $ad->html_code)
+                {!! $ad->html_code !!}
+                @elseif($ad->image_url)
+                @if($ad->target_url)
+                <a href="{{ route('ads.click', $ad) }}" target="_blank" rel="nofollow sponsored noopener" class="block">
+                    <img src="{{ $ad->image_url }}" alt="{{ $ad->alt_text ?: $ad->title }}" class="w-full h-[600px] object-cover">
+                </a>
+                @else
+                <img src="{{ $ad->image_url }}" alt="{{ $ad->alt_text ?: $ad->title }}" class="w-full h-[600px] object-cover">
+                @endif
+                @endif
+            </div>
+            @empty
+            <div class="min-h-[600px] flex items-start justify-center text-[10px] text-gray-400/80 uppercase tracking-wide pt-1">
+                Sağ reklam
+            </div>
+            @endforelse
+            </div>
+        </aside>
+    </div>
 
     <footer class="mt-16 bg-black text-white">
         <div class="max-w-4xl mx-auto px-4 py-12 text-center">

@@ -89,6 +89,10 @@
                         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                         <span>Yazarlar</span>
                     </a>
+                    <a href="{{ route('admin.advertisements.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-700/50 {{ request()->routeIs('admin.advertisements.*') ? 'bg-slate-700 text-white' : '' }}">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5h2m-1-2v2m0 14v2m-7-9H3m18 0h-2m-1.364-5.636l-1.414 1.414M6.778 17.222l-1.414 1.414m0-12.728l1.414 1.414m10.444 10.444l1.414 1.414M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                        <span>Reklam Alanları</span>
+                    </a>
                 </div>
                 @endif
                 @endauth

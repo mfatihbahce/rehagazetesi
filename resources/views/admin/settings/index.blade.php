@@ -31,6 +31,10 @@
                 <svg class="w-5 h-5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2V5a2 2 0 00-2-2h-6a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                 Görünüm
             </a>
+            <a href="#layout-reklam" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700">
+                <svg class="w-5 h-5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                Üst Reklam
+            </a>
             <a href="#yayin" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700">
                 <svg class="w-5 h-5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
                 Yayın Ayarları
@@ -139,6 +143,46 @@
                     <p class="mt-1 text-xs text-gray-500">ICO veya PNG. 32x32 önerilir. Boş bırakırsanız mevcut favicon korunur.</p>
                 </div>
                 <div><label class="block text-sm font-medium text-gray-700 mb-1">Footer Metni</label><textarea name="footer_text" rows="2" class="w-full border rounded-lg px-4 py-2">{{ old('footer_text', $settings['footer_text'] ?? '') }}</textarea></div>
+            </div>
+        </section>
+
+        {{-- Layout üst reklam (kalıcı, tıklanabilir değil) --}}
+        <section id="layout-reklam" class="bg-white rounded-xl shadow overflow-hidden">
+            <div class="p-4 border-b bg-gray-50">
+                <h3 class="font-semibold text-gray-800">Üst Reklam Alanı (Layout)</h3>
+                <p class="text-sm text-gray-500">Tüm sayfalarda header altında gösterilir. Tarih aralığı veya tıklama takibi yoktur; yalnızca görsel bannerdır.</p>
+            </div>
+            <div class="p-6 space-y-4">
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" name="layout_ad_enabled" value="1" class="rounded" {{ old('layout_ad_enabled', $settings['layout_ad_enabled'] ?? false) ? 'checked' : '' }}>
+                    <span class="text-sm font-medium text-gray-700">Üst reklamı göster</span>
+                </label>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Alt metin (erişilebilirlik)</label>
+                    <input type="text" name="layout_ad_alt" value="{{ old('layout_ad_alt', $settings['layout_ad_alt'] ?? '') }}" class="w-full border rounded-lg px-4 py-2" placeholder="Reklam açıklaması">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Masaüstü görseli</label>
+                        @if(!empty($settings['layout_ad_desktop_url'] ?? ''))
+                        <div class="mb-2 border rounded-lg p-2 bg-gray-50 inline-block">
+                            <img src="{{ asset('storage/' . $settings['layout_ad_desktop_url']) }}" alt="Masaüstü üst reklam önizleme" class="max-h-24 object-contain">
+                        </div>
+                        @endif
+                        <input type="file" name="layout_ad_desktop" accept="image/jpeg,image/png,image/gif,image/webp" class="w-full border rounded-lg px-4 py-2 text-sm">
+                        <p class="mt-1 text-xs text-gray-500">Önerilen: 1200 × 120 px (yatay). Boş bırakırsanız mevcut görsel korunur.</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Mobil görseli</label>
+                        @if(!empty($settings['layout_ad_mobile_url'] ?? ''))
+                        <div class="mb-2 border rounded-lg p-2 bg-gray-50 inline-block">
+                            <img src="{{ asset('storage/' . $settings['layout_ad_mobile_url']) }}" alt="Mobil üst reklam önizleme" class="max-h-24 object-contain">
+                        </div>
+                        @endif
+                        <input type="file" name="layout_ad_mobile" accept="image/jpeg,image/png,image/gif,image/webp" class="w-full border rounded-lg px-4 py-2 text-sm">
+                        <p class="mt-1 text-xs text-gray-500">Önerilen: 640 × 120 px (yatay). Boş bırakırsanız mevcut görsel korunur.</p>
+                    </div>
+                </div>
             </div>
         </section>
 

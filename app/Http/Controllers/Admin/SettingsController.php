@@ -44,6 +44,10 @@ class SettingsController extends Controller
             'news_per_page' => 12,
             'comment_enabled' => false,
             'social_share_enabled' => true,
+            'layout_ad_enabled' => false,
+            'layout_ad_desktop_url' => '',
+            'layout_ad_mobile_url' => '',
+            'layout_ad_alt' => '',
         ];
     }
 
@@ -81,10 +85,13 @@ class SettingsController extends Controller
             'news_per_page' => ['nullable', 'integer', 'min:6', 'max:50'],
             'comment_enabled' => ['nullable', 'boolean'],
             'social_share_enabled' => ['nullable', 'boolean'],
+            'layout_ad_enabled' => ['nullable', 'boolean'],
+            'layout_ad_alt' => ['nullable', 'string', 'max:255'],
         ]);
 
         $validated['comment_enabled'] = (bool) ($request->boolean('comment_enabled'));
         $validated['social_share_enabled'] = (bool) ($request->boolean('social_share_enabled'));
+        $validated['layout_ad_enabled'] = (bool) ($request->boolean('layout_ad_enabled'));
 
         if ($request->hasFile('logo')) {
             $request->validate(['logo' => ['image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048']]);
@@ -98,6 +105,20 @@ class SettingsController extends Controller
             $validated['favicon_url'] = $this->mediaService->uploadFavicon($request->file('favicon'));
         } else {
             $validated['favicon_url'] = SettingsHelper::get('favicon_url', '');
+        }
+
+        if ($request->hasFile('layout_ad_desktop')) {
+            $request->validate(['layout_ad_desktop' => ['image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096']]);
+            $validated['layout_ad_desktop_url'] = $this->mediaService->uploadLayoutAdDesktop($request->file('layout_ad_desktop'));
+        } else {
+            $validated['layout_ad_desktop_url'] = SettingsHelper::get('layout_ad_desktop_url', '');
+        }
+
+        if ($request->hasFile('layout_ad_mobile')) {
+            $request->validate(['layout_ad_mobile' => ['image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096']]);
+            $validated['layout_ad_mobile_url'] = $this->mediaService->uploadLayoutAdMobile($request->file('layout_ad_mobile'));
+        } else {
+            $validated['layout_ad_mobile_url'] = SettingsHelper::get('layout_ad_mobile_url', '');
         }
 
         Setting::setMany($validated);

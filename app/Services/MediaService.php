@@ -60,4 +60,24 @@ class MediaService
         $filename = 'favicon.' . $file->getClientOriginalExtension();
         return $file->storeAs('site', $filename, 'public');
     }
+
+    /**
+     * Layout üst bandı — masaüstü reklam görseli
+     */
+    public function uploadLayoutAdDesktop(UploadedFile $file): string
+    {
+        $filename = 'layout-ad-desktop.' . $file->getClientOriginalExtension();
+
+        return $file->storeAs('site', $filename, 'public');
+    }
+
+    /**
+     * Layout üst bandı — mobil reklam görseli
+     */
+    public function uploadLayoutAdMobile(UploadedFile $file): string
+    {
+        $filename = 'layout-ad-mobile.' . $file->getClientOriginalExtension();
+
+        return $file->storeAs('site', $filename, 'public');
+    }
 }
