@@ -212,56 +212,57 @@
     </section>
     @endif
 
-    <main class="flex-1 max-w-7xl mx-auto px-4 py-6 w-full">
-        @yield('content')
-    </main>
-
-    <div class="hidden lg:block">
-        <aside class="fixed left-2 top-[170px] bottom-4 w-[120px] z-40">
-            <div class="h-full overflow-y-auto space-y-3 pr-1">
-            @forelse(($leftSidebarAds ?? collect()) as $ad)
-            <div class="min-h-[600px] overflow-hidden">
-                @if($ad->type === 'html' && $ad->html_code)
-                {!! $ad->html_code !!}
-                @elseif($ad->image_url)
-                @if($ad->target_url)
-                <a href="{{ route('ads.click', $ad) }}" target="_blank" rel="nofollow sponsored noopener" class="block">
+    {{-- Masaüstü: yan reklamlar fixed değil sticky; böylece footer üzerine binmez, içerikle birlikte yukarı çıkar --}}
+    <div class="flex flex-1 flex-col lg:flex-row w-full min-w-0">
+        <aside class="hidden lg:block w-[120px] shrink-0 pl-2 box-border" aria-label="Sol reklam alanı">
+            <div class="sticky top-[170px] max-h-[calc(100vh-170px-1rem)] overflow-y-auto overflow-x-hidden space-y-3 pr-1">
+                @forelse(($leftSidebarAds ?? collect()) as $ad)
+                <div class="min-h-[600px] overflow-hidden">
+                    @if($ad->type === 'html' && $ad->html_code)
+                    {!! $ad->html_code !!}
+                    @elseif($ad->image_url)
+                    @if($ad->target_url)
+                    <a href="{{ route('ads.click', $ad) }}" target="_blank" rel="nofollow sponsored noopener" class="block">
+                        <img src="{{ $ad->image_url }}" alt="{{ $ad->alt_text ?: $ad->title }}" class="w-full h-[600px] object-cover">
+                    </a>
+                    @else
                     <img src="{{ $ad->image_url }}" alt="{{ $ad->alt_text ?: $ad->title }}" class="w-full h-[600px] object-cover">
-                </a>
-                @else
-                <img src="{{ $ad->image_url }}" alt="{{ $ad->alt_text ?: $ad->title }}" class="w-full h-[600px] object-cover">
-                @endif
-                @endif
-            </div>
-            @empty
-            <div class="min-h-[600px] flex items-start justify-center text-[10px] text-gray-400/80 uppercase tracking-wide pt-1">
-                Sol reklam
-            </div>
-            @endforelse
+                    @endif
+                    @endif
+                </div>
+                @empty
+                <div class="min-h-[600px] flex items-start justify-center text-[10px] text-gray-400/80 uppercase tracking-wide pt-1">
+                    Sol reklam
+                </div>
+                @endforelse
             </div>
         </aside>
 
-        <aside class="fixed right-2 top-[170px] bottom-4 w-[120px] z-40">
-            <div class="h-full overflow-y-auto space-y-3 pl-1">
-            @forelse(($rightSidebarAds ?? collect()) as $ad)
-            <div class="min-h-[600px] overflow-hidden">
-                @if($ad->type === 'html' && $ad->html_code)
-                {!! $ad->html_code !!}
-                @elseif($ad->image_url)
-                @if($ad->target_url)
-                <a href="{{ route('ads.click', $ad) }}" target="_blank" rel="nofollow sponsored noopener" class="block">
+        <main class="flex-1 min-w-0 max-w-7xl mx-auto px-4 py-6 w-full">
+            @yield('content')
+        </main>
+
+        <aside class="hidden lg:block w-[120px] shrink-0 pr-2 box-border" aria-label="Sağ reklam alanı">
+            <div class="sticky top-[170px] max-h-[calc(100vh-170px-1rem)] overflow-y-auto overflow-x-hidden space-y-3 pl-1">
+                @forelse(($rightSidebarAds ?? collect()) as $ad)
+                <div class="min-h-[600px] overflow-hidden">
+                    @if($ad->type === 'html' && $ad->html_code)
+                    {!! $ad->html_code !!}
+                    @elseif($ad->image_url)
+                    @if($ad->target_url)
+                    <a href="{{ route('ads.click', $ad) }}" target="_blank" rel="nofollow sponsored noopener" class="block">
+                        <img src="{{ $ad->image_url }}" alt="{{ $ad->alt_text ?: $ad->title }}" class="w-full h-[600px] object-cover">
+                    </a>
+                    @else
                     <img src="{{ $ad->image_url }}" alt="{{ $ad->alt_text ?: $ad->title }}" class="w-full h-[600px] object-cover">
-                </a>
-                @else
-                <img src="{{ $ad->image_url }}" alt="{{ $ad->alt_text ?: $ad->title }}" class="w-full h-[600px] object-cover">
-                @endif
-                @endif
-            </div>
-            @empty
-            <div class="min-h-[600px] flex items-start justify-center text-[10px] text-gray-400/80 uppercase tracking-wide pt-1">
-                Sağ reklam
-            </div>
-            @endforelse
+                    @endif
+                    @endif
+                </div>
+                @empty
+                <div class="min-h-[600px] flex items-start justify-center text-[10px] text-gray-400/80 uppercase tracking-wide pt-1">
+                    Sağ reklam
+                </div>
+                @endforelse
             </div>
         </aside>
     </div>
