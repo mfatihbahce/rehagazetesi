@@ -79,11 +79,12 @@
                     <span class="font-bold text-xl tracking-tight">{{ $siteName }}</span>
                     @endif
                 </a>
-                <nav class="hidden lg:flex items-center gap-8 text-sm font-medium uppercase tracking-wide">
+                <nav class="hidden lg:flex items-center gap-6 text-sm font-medium uppercase tracking-wide">
                     @foreach(\App\Models\Category::where('is_active', true)->orderBy('order')->limit(5)->get() as $cat)
                     <a href="{{ route('category.show', $cat->slug) }}" class="hover:opacity-90">{{ $cat->name }}</a>
                     @endforeach
-                    <a href="{{ route('editors.index') }}" class="hover:opacity-90">Editörler</a>
+                    <a href="{{ route('editors.index') }}" class="hover:opacity-90">Yazarlar</a>
+                    <a href="https://arsiv.rehagazetesi.com" class="hover:opacity-90">Arşiv</a>
                 </nav>
                 <div class="flex items-center gap-4 sm:gap-6 shrink-0">
                     <div class="hidden sm:flex items-center gap-4 text-sm">
@@ -118,12 +119,13 @@
                     <a href="{{ route('category.show', $cat->slug) }}" class="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200 whitespace-nowrap shrink-0">#{{ Str::slug($cat->name) }}</a>
                     @endforeach
                 </div>
-                <div class="flex items-center gap-4 shrink-0">
+                <div class="flex items-center gap-3 shrink-0">
                     @php $firstCat = \App\Models\Category::where('is_active', true)->orderBy('order')->first(); @endphp
                     @if($firstCat)
                     <a href="{{ route('category.show', $firstCat->slug) }}" class="hover:text-[#BB0A30]">Gündem</a>
                     @endif
-                    <a href="{{ route('editors.index') }}" class="hover:text-[#BB0A30]">Editörler</a>
+                    <a href="{{ route('editors.index') }}" class="hover:text-[#BB0A30]">Yazarlar</a>
+                    <a href="https://arsiv.rehagazetesi.com" class="hover:text-[#BB0A30]">Arşiv</a>
                 </div>
             </div>
         </div>
@@ -176,7 +178,8 @@
                 @foreach(\App\Models\Category::where('is_active', true)->orderBy('order')->get() as $cat)
                 <a href="{{ route('category.show', $cat->slug) }}" class="py-2">{{ $cat->name }}</a>
                 @endforeach
-                <a href="{{ route('editors.index') }}" class="py-2">Editörler</a>
+                <a href="{{ route('editors.index') }}" class="py-2">Yazarlar</a>
+                <a href="https://arsiv.rehagazetesi.com" class="py-2">Arşiv</a>
                 <a href="{{ route('imprint') }}" class="py-2">Künye</a>
             </div>
         </div>
@@ -211,7 +214,7 @@
                 <span class="text-gray-600">|</span>
                 <a href="{{ route('imprint') }}" class="hover:opacity-80 transition-opacity">Künye</a>
                 <span class="text-gray-600">|</span>
-                <a href="{{ route('editors.index') }}" class="hover:opacity-80 transition-opacity">Editörler</a>
+                <a href="{{ route('editors.index') }}" class="hover:opacity-80 transition-opacity">Yazarlar</a>
                 <span class="text-gray-600">|</span>
                 <a href="{{ route('weather.index') }}" class="hover:opacity-80 transition-opacity">Hava Durumu</a>
                 <span class="text-gray-600">|</span>

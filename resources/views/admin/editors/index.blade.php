@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Editörler')
-@section('page-title', 'Editör Listesi')
+@section('title', 'Yazarlar')
+@section('page-title', 'Yazar Listesi')
 
 @section('content')
 @if(session('success'))
@@ -10,7 +10,7 @@
 <div class="mb-4">
     <a href="{{ route('admin.editors.create') }}" class="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        Yeni Editör Ekle
+        Yeni Yazar Ekle
     </a>
 </div>
 <div class="bg-white rounded-xl shadow overflow-hidden">
@@ -42,7 +42,7 @@
                 <td class="p-4 text-right">
                     <div class="inline-flex items-center gap-3">
                         <a href="{{ route('admin.editors.edit', $editor) }}" class="text-red-600 hover:text-red-800 font-medium">Düzenle</a>
-                        <form action="{{ route('admin.editors.destroy', $editor) }}" method="POST" class="inline" onsubmit="return confirm('Bu editörü silmek istediğinize emin misiniz?');">
+                        <form action="{{ route('admin.editors.destroy', $editor) }}" method="POST" class="inline" onsubmit="return confirm('Bu yazarı silmek istediğinize emin misiniz?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-gray-600 hover:text-red-700 font-medium">Sil</button>
@@ -51,7 +51,7 @@
                 </td>
             </tr>
             @empty
-            <tr><td colspan="9" class="p-8 text-center text-gray-500">Editör bulunamadı.</td></tr>
+            <tr><td colspan="9" class="p-8 text-center text-gray-500">Yazar bulunamadı.</td></tr>
             @endforelse
         </tbody>
     </table>

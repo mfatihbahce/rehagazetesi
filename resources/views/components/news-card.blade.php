@@ -11,7 +11,7 @@
 
 @php
     $showDate = $showDate || $variant === 'withMeta';
-    $showViews = $showViews || $variant === 'withMeta';
+    $showViews = false; // Frontend'de okunma sayısı geçici olarak gizli
     $isCompact = $variant === 'compact';
     $isHero = $variant === 'hero';
     $imgUrl = $news->featured_image ? asset('storage/'.$news->featured_image) : 'https://via.placeholder.com/800x500/1a1a1a/6b7280?text=Haber';

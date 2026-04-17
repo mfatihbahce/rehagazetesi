@@ -42,7 +42,6 @@
     <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
         <a href="{{ route('category.show', $news->category->slug) }}" class="px-3 py-1 bg-[#BB0A30] text-white font-medium">{{ $news->category->name }}</a>
         <span>{{ $news->published_at?->format('d.m.Y H:i') }}</span>
-        <span>{{ $news->views }} okunma</span>
     </div>
 
     @if(\App\Helpers\SettingsHelper::get('social_share_enabled', true))

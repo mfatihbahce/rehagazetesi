@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
 @section('content')
-<h1 class="text-2xl lg:text-3xl font-bold text-black mb-8 border-b-2 border-[#BB0A30] pb-2 inline-block">Editörlerimiz</h1>
+<h1 class="text-2xl lg:text-3xl font-bold text-black mb-8 border-b-2 border-[#BB0A30] pb-2 inline-block">Yazarlarımız</h1>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
     @forelse($editors as $editor)
@@ -34,7 +34,7 @@
         </div>
     </a>
     @empty
-    <p class="col-span-full text-gray-500 py-12 text-center">Henüz editör bulunmuyor.</p>
+    <p class="col-span-full text-gray-500 py-12 text-center">Henüz yazar bulunmuyor.</p>
     @endforelse
 </div>
 @endsection

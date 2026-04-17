@@ -35,7 +35,6 @@
                 @endif
                 <div class="flex items-center gap-4 text-sm text-gray-500 mb-6">
                     <span>{{ $main->published_at?->format('d.m.Y H:i') }}</span>
-                    <span>{{ number_format($main->views) }} okunma</span>
                 </div>
                 <ul class="mt-auto space-y-3 border-t border-gray-100 pt-4">
                     @foreach($featured->except($index)->take(3) as $item)
@@ -94,7 +93,7 @@
 @if(isset($editors) && $editors->isNotEmpty())
 <section class="mb-10" id="editorler-yatay">
     <div class="flex items-center justify-between mb-5">
-        <h2 class="text-lg sm:text-xl font-bold text-gray-900 border-b-2 border-[#BB0A30] pb-2 inline-block">Editörler</h2>
+        <h2 class="text-lg sm:text-xl font-bold text-gray-900 border-b-2 border-[#BB0A30] pb-2 inline-block">Yazarlar</h2>
         <a href="{{ route('editors.index') }}" class="text-[#BB0A30] text-sm font-semibold hover:underline">Tümü →</a>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
@@ -166,7 +165,6 @@
                         <span class="text-[#BB0A30] font-bold text-sm w-6 shrink-0">{{ $index + 1 }}</span>
                         <span class="group-hover:text-[#BB0A30] font-medium line-clamp-2">{{ $news->title }}</span>
                     </a>
-                    <span class="text-xs text-gray-500 block ml-9">{{ $news->views }} okunma</span>
                 </li>
                 @endforeach
             </ul>
